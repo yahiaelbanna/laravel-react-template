@@ -17,7 +17,7 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
             <div className="flex items-center gap-2">
                 <div className="relative hidden items-center gap-2 rounded-lg border border-sidebar-border/70 bg-sidebar/50 text-xs text-muted-foreground transition-colors hover:border-sidebar-border hover:bg-sidebar md:flex w-67">
                     <Search className="size-4 absolute start-2.5 opacity-85" />
-                    <Input placeholder='بحث سريع...' className='ps-9 h-9 font-light' />
+                    <Input placeholder='Search...' className='ps-9 h-9 font-light' />
                     <kbd className="absolute end-2 pointer-events-none inline-flex h-4.5 select-none items-center gap-0.5 rounded border border-sidebar-border bg-background px-1.5 font-mono text-[13.5px] font-medium text-muted-foreground">
                         <span className="text-[8.5px] me-1">⌘</span>K
                     </kbd>

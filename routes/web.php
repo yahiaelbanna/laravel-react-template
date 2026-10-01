@@ -12,7 +12,7 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    require __DIR__.'/modules/tasks.php';
+    require __DIR__.'/modules/module.php';
 });
 
 require __DIR__.'/settings.php';

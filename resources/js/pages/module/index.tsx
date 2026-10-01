@@ -28,26 +28,26 @@ import { Download, Filter, Kanban, MoreVertical, Plus, Table2, Upload } from "lu
 export default function TasksIndex() {
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'الرئيسية',
+            title: 'Dashboard',
             href: '/dashboard',
         },
         {
-            title: 'المهام',
-            href: '/tasks',
+            title: 'Module',
+            href: '/module',
         },
     ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="المهام" />
+            <Head title="Module" />
 
             {/* START THE TEMPLATE PAGE */}
 
-            <div className="border-y py-2 px-4 items-center justify-between flex">
+            <div className="border-y py-3 px-4 items-center justify-between flex">
                 <div className="flex items-center gap-2">
                     <Button variant={'ghost'} size={'sm'}>
                         <Filter className="size-3" />
-                        ترشيح
+                        Filter
                     </Button>
                     <div className="h-6 border-[1px]"></div>
                     <div className="flex gap-1.5 items-center">
@@ -60,9 +60,9 @@ export default function TasksIndex() {
                     </div>
                 </div>
                 <div className="flex gap-2 items-center">
-                    <Button variant={"outline"} size={'sm'}><Upload className="opacity-60" />استراد</Button>
-                    <Button variant={"outline"} size={'sm'}><Download className="opacity-60" />تصدير</Button>
-                    <Button size={'sm'}><Plus />إضافة مهمة</Button>
+                    <Button variant={"outline"} size={'sm'}><Upload className="opacity-60" />Import</Button>
+                    <Button variant={"outline"} size={'sm'}><Download className="opacity-60" />Export</Button>
+                    <Button size={'sm'}><Plus />Add Module</Button>
                 </div>
             </div>
 
@@ -70,34 +70,32 @@ export default function TasksIndex() {
             <div>
                 <Table>
                     <TableHeader>
-                        <TableRow className="hover:bg-muted-foreground/5!">
-                            <TableHead><Checkbox /></TableHead>
-                            <TableHead>#</TableHead>
-                            <TableHead>الاسم</TableHead>
-                            <TableHead>المسؤول</TableHead>
-                            <TableHead>العميل</TableHead>
-                            <TableHead>الحالة</TableHead>
-                            <TableHead>الأولوية</TableHead>
-                            <TableHead>تاريخ البدء</TableHead>
-                            <TableHead>تاريخ الانتهاء</TableHead>
-                            <TableHead>المرفقات</TableHead>
-                            <TableHead>الملاحظات</TableHead>
+                        <TableRow className="hover:bg-muted-foreground/0!">
+                            <TableHead><Checkbox className="size-4.5!" /></TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Manager</TableHead>
+                            <TableHead>Client</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Priority</TableHead>
+                            <TableHead>Start Date</TableHead>
+                            <TableHead>End Date</TableHead>
+                            <TableHead>Attachments</TableHead>
+                            <TableHead>Notes</TableHead>
                             <TableHead></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         <TableRow>
-                            <TableCell><Checkbox /></TableCell>
-                            <TableCell>1</TableCell>
-                            <TableCell>المهمة الأولى</TableCell>
-                            <TableCell>المسؤول الأول</TableCell>
-                            <TableCell>العميل الأول</TableCell>
-                            <TableCell>الحالة الأولى</TableCell>
-                            <TableCell>الأولوية الأولى</TableCell>
-                            <TableCell>تاريخ البدء الأول</TableCell>
-                            <TableCell>تاريخ الانتهاء الأول</TableCell>
-                            <TableCell>المرفقات الأولى</TableCell>
-                            <TableCell>الملاحظات الأولى</TableCell>
+                            <TableCell><Checkbox className="size-4.5!" /></TableCell>
+                            <TableCell>Task1</TableCell>
+                            <TableCell>User1</TableCell>
+                            <TableCell>Client1</TableCell>
+                            <TableCell>Status1</TableCell>
+                            <TableCell>Priority1</TableCell>
+                            <TableCell>2022-01-01</TableCell>
+                            <TableCell>2022-01-01</TableCell>
+                            <TableCell>Attachments1</TableCell>
+                            <TableCell>Notes1</TableCell>
                             <TableCell>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
@@ -105,29 +103,28 @@ export default function TasksIndex() {
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="start">
                                         <DropdownMenuGroup>
-                                            <DropdownMenuItem>تعديل</DropdownMenuItem>
-                                            <DropdownMenuItem>عرض</DropdownMenuItem>
+                                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                                            <DropdownMenuItem>View</DropdownMenuItem>
                                         </DropdownMenuGroup>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuGroup>
-                                            <DropdownMenuItem className="text-destructive hover:bg-red-500/10" >حذف</DropdownMenuItem>
+                                            <DropdownMenuItem className="text-destructive hover:bg-red-500/10" >Delete</DropdownMenuItem>
                                         </DropdownMenuGroup>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell><Checkbox /></TableCell>
-                            <TableCell>1</TableCell>
-                            <TableCell>المهمة الأولى</TableCell>
-                            <TableCell>المسؤول الأول</TableCell>
-                            <TableCell>العميل الأول</TableCell>
-                            <TableCell>الحالة الأولى</TableCell>
-                            <TableCell>الأولوية الأولى</TableCell>
-                            <TableCell>تاريخ البدء الأول</TableCell>
-                            <TableCell>تاريخ الانتهاء الأول</TableCell>
-                            <TableCell>المرفقات الأولى</TableCell>
-                            <TableCell>الملاحظات الأولى</TableCell>
+                            <TableCell><Checkbox className="size-4.5!" /></TableCell>
+                            <TableCell>Task2</TableCell>
+                            <TableCell>User2</TableCell>
+                            <TableCell>Client2</TableCell>
+                            <TableCell>Status2</TableCell>
+                            <TableCell>Priority2</TableCell>
+                            <TableCell>2022-01-01</TableCell>
+                            <TableCell>2022-01-01</TableCell>
+                            <TableCell>Attachments2</TableCell>
+                            <TableCell>Notes2</TableCell>
                             <TableCell>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
@@ -135,29 +132,28 @@ export default function TasksIndex() {
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="start">
                                         <DropdownMenuGroup>
-                                            <DropdownMenuItem>تعديل</DropdownMenuItem>
-                                            <DropdownMenuItem>عرض</DropdownMenuItem>
+                                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                                            <DropdownMenuItem>View</DropdownMenuItem>
                                         </DropdownMenuGroup>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuGroup>
-                                            <DropdownMenuItem className="text-destructive hover:bg-red-500/10" >حذف</DropdownMenuItem>
+                                            <DropdownMenuItem className="text-destructive hover:bg-red-500/10" >Delete</DropdownMenuItem>
                                         </DropdownMenuGroup>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell><Checkbox /></TableCell>
-                            <TableCell>1</TableCell>
-                            <TableCell>المهمة الأولى</TableCell>
-                            <TableCell>المسؤول الأول</TableCell>
-                            <TableCell>العميل الأول</TableCell>
-                            <TableCell>الحالة الأولى</TableCell>
-                            <TableCell>الأولوية الأولى</TableCell>
-                            <TableCell>تاريخ البدء الأول</TableCell>
-                            <TableCell>تاريخ الانتهاء الأول</TableCell>
-                            <TableCell>المرفقات الأولى</TableCell>
-                            <TableCell>الملاحظات الأولى</TableCell>
+                            <TableCell><Checkbox className="size-4.5!" /></TableCell>
+                            <TableCell>Task3</TableCell>
+                            <TableCell>User3</TableCell>
+                            <TableCell>Client3</TableCell>
+                            <TableCell>Status3</TableCell>
+                            <TableCell>Priority3</TableCell>
+                            <TableCell>2022-01-01</TableCell>
+                            <TableCell>2022-01-01</TableCell>
+                            <TableCell>Attachments3</TableCell>
+                            <TableCell>Notes3</TableCell>
                             <TableCell>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
@@ -165,12 +161,12 @@ export default function TasksIndex() {
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="start">
                                         <DropdownMenuGroup>
-                                            <DropdownMenuItem>تعديل</DropdownMenuItem>
-                                            <DropdownMenuItem>عرض</DropdownMenuItem>
+                                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                                            <DropdownMenuItem>View</DropdownMenuItem>
                                         </DropdownMenuGroup>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuGroup>
-                                            <DropdownMenuItem className="text-destructive hover:bg-red-500/10 hover:text-destructive" >حذف</DropdownMenuItem>
+                                            <DropdownMenuItem className="text-destructive hover:bg-red-500/10 hover:text-destructive" >Delete</DropdownMenuItem>
                                         </DropdownMenuGroup>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
