@@ -1,11 +1,12 @@
 import { TableBody } from "@/components/ui/table";
 import DataTableRow from "./row";
+import Config from "@/types/config-type";
 
-export default function DataTableBody() {
+export default function DataTableBody({ config, data }: { config: Config, data: any[] }) {
     return (
         <TableBody>
-            {Array.from({ length: 5 }).map((_, index) => (
-                <DataTableRow key={index} />
+            {data.map((item, index) => (
+                <DataTableRow key={index} config={config} item={item} />
             ))}
         </TableBody>
     );

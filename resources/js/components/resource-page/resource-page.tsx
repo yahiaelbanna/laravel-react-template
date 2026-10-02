@@ -5,21 +5,22 @@ import { type BreadcrumbItem } from "@/types";
 import { Head } from "@inertiajs/react";
 import ToolBar from "./tool-bar";
 import DataTable from "./data-table/data-table";
+import Config from "@/types/config-type";
 
-export default function ResourcePage() {
+export default function ResourcePage({ config, data }: { config: Config, data: any[] }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
             href: '/dashboard',
         },
         {
-            title: 'Module',
-            href: '/module',
+            title: String(config.pluralTitle),
+            href: `/${config.modelName}`,
         },
     ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Module" />
+            <Head title={String(config.pluralTitle)} />
 
             {/* Tool Bar Section Start */}
             <ToolBar />
@@ -27,8 +28,8 @@ export default function ResourcePage() {
 
             {/* Table Section Start */}
 
-            <div>
-                <DataTable />
+            <div className="w-full h-full">
+                <DataTable config={config} data={data} />
             </div>
             {/* Table Section End */}
         </AppLayout>
