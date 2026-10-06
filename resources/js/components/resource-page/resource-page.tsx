@@ -6,9 +6,11 @@ import { Head } from "@inertiajs/react";
 import ToolBar from "./tool-bar";
 import DataTable from "./data-table/data-table";
 import Config from "@/types/config-type";
-// import useViewType from "@/hooks/use-view-type";
+import useFilterPanel from "@/hooks/resource-page/use-filter-panel";
 
 export default function ResourcePage({ config, data }: { config: Config, data: any[] }) {
+    const { panel } = useFilterPanel();
+
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
@@ -30,7 +32,12 @@ export default function ResourcePage({ config, data }: { config: Config, data: a
 
             {/* Table Section Start */}
 
-            <div className="w-full h-full">
+            <div className={`w-full h-full flex`}>
+                {/* {panel && ( */}
+                <div className={`h-full shrink-0 transition-all duration-300 ease-out overflow-hidden truncate border-accent/70 border-0 ${panel ? 'w-72 border-e' : 'w-0'}`}>
+                    <h3 className="text-sm font-light bg-muted-foreground/5 p-2.5 border-accent/70 border-b">Filter Panel</h3>
+                </div>
+                {/* )} */}
                 <DataTable config={config} data={data} />
             </div>
             {/* Table Section End */}

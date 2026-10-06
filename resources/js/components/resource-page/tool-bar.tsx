@@ -2,16 +2,20 @@ import { Button } from "@/components/ui/button";
 import Config, { ViewTypes } from "@/types/config-type";
 import { Upload, Download, Filter, Kanban, Table2, Plus, LucideIcon } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import useViewType from "@/hooks/use-view-type";
+import useViewType from "@/hooks/resource-page/use-view-type";
+import useFilterPanel from "@/hooks/resource-page/use-filter-panel";
 
 export default function ToolBar({ config }: { config: Config }) {
     const { viewType, changeView } = useViewType({ viewTypes: config.viewTypes });
+    const { togglePanel } = useFilterPanel();
 
     return (
 
         <div className="border-y py-3 px-4 items-center justify-between flex">
             <div className="flex items-center gap-2">
-                <Button variant={'ghost'} size={'sm'}>
+                <Button variant={'ghost'} size={'sm'}
+                    onClick={togglePanel}
+                >
                     <Filter className="size-3" />
                     Filter
                 </Button>
