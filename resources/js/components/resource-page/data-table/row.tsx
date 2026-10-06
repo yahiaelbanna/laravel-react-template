@@ -34,7 +34,7 @@ export default function DataTableRow({ config, item }: { config: Config, item: a
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem className="text-destructive hover:bg-red-500/10" >Delete</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive hover:bg-red-500/10! hover:text-destructive!" >Delete</DropdownMenuItem>
                         </DropdownMenuGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -42,34 +42,3 @@ export default function DataTableRow({ config, item }: { config: Config, item: a
         </TableRow>
     );
 }
-// return (
-//     <TableRow>
-//         <TableCell><Checkbox className="size-4.5!" /></TableCell>
-//         <DataTableCell />
-//         <DataTableCell />
-//         <DataTableCell />
-//         <DataTableCell />
-//         <DataTableCell />
-//         <DataTableCell />
-//         <DataTableCell />
-//         <DataTableCell />
-//         <TableCell>
-//             <DropdownMenu>
-//                 <DropdownMenuTrigger asChild>
-//                     <Button variant="ghost" className="p-0 size-7"><MoreVertical /></Button>
-//                 </DropdownMenuTrigger>
-//                 <DropdownMenuContent align="start">
-//                     <DropdownMenuGroup>
-//                         <DropdownMenuItem>Edit</DropdownMenuItem>
-//                         <DropdownMenuItem>View</DropdownMenuItem>
-//                     </DropdownMenuGroup>
-//                     <DropdownMenuSeparator />
-//                     <DropdownMenuGroup>
-//                         <DropdownMenuItem className="text-destructive hover:bg-red-500/10" >Delete</DropdownMenuItem>
-//                     </DropdownMenuGroup>
-//                 </DropdownMenuContent>
-//             </DropdownMenu>
-//         </TableCell>
-//     </TableRow>
-// );
-// }

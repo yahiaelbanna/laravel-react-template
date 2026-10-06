@@ -31,7 +31,7 @@ export default interface Config {
     editable?: Boolean;
     showable?: Boolean;
     deletable?: Boolean;
-    viewTypes?: ('table' | 'kanban')[];
+    viewTypes?: ViewTypes[];
 
     columns: Column[];
 }
@@ -49,3 +49,5 @@ type columnType =
 
 export type BadgeVariant =
     "default" | "secondary" | "destructive" | "outline";
+
+export type ViewTypes = 'table' | 'kanban';

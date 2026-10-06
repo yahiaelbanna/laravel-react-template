@@ -10,4 +10,9 @@ class ModuleController extends Controller
     {
         return Inertia::render('module/index');
     }
+
+    public function create()
+    {
+        return Inertia::render('module/index');
+    }
 }
