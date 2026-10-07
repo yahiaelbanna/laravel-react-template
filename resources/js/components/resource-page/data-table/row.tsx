@@ -9,16 +9,26 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
-import { MoreVertical } from "lucide-react";
+import { Copy, Eye, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import DataTableCell from "./cell";
 import Config from "@/types/config-type";
+import useSelection from "@/hooks/resource-page/use-selection";
 
 
 
 export default function DataTableRow({ config, item }: { config: Config, item: any }) {
+    const { isSelected, toggle } = useSelection();
     return (
         <TableRow>
-            <TableCell><Checkbox className="size-4.5!" /></TableCell>
+
+            <TableCell>
+                <Checkbox
+                    id={`resource-select-${config.modelName}-${item.id}`}
+                    checked={isSelected(item.id)}
+                    onCheckedChange={() => toggle(item.id)}
+                    className="size-4.5!" />
+            </TableCell>
+
             {config.columns.map((column) => (
                 <DataTableCell key={column.key} column={column} value={item[column.key]} />
             ))}
@@ -27,14 +37,27 @@ export default function DataTableRow({ config, item }: { config: Config, item: a
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="p-0 size-7"><MoreVertical /></Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
+                    <DropdownMenuContent align="end">
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>View</DropdownMenuItem>
+                            {/* {config.showable && <DropdownMenuItem>
+                                <Eye className="opacity-50" />
+                                {config.showLabel || `View`}
+                            </DropdownMenuItem>} */}
+                            {config.editable && <DropdownMenuItem>
+                                <Pencil className="opacity-50" />
+                                {config.editLabel || `Edit`}
+                            </DropdownMenuItem>}
+                            {config.duplicateable && <DropdownMenuItem>
+                                <Copy className="opacity-50" />
+                                {config.duplicateLabel || `Duplicate`}
+                            </DropdownMenuItem>}
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem className="text-destructive hover:bg-red-500/10! hover:text-destructive!" >Delete</DropdownMenuItem>
+                            {config.deletable && <DropdownMenuItem className="text-destructive hover:bg-red-500/10! hover:text-destructive!">
+                                <Trash2 className="opacity-50" />
+                                {config.deleteLabel || `Delete`}
+                            </DropdownMenuItem>}
                         </DropdownMenuGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>

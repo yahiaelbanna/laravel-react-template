@@ -55,6 +55,7 @@ const config: Config = {
     // deleteErrorMessage: "Failed to delete module",
 
     createable: true,
+    duplicateable: true,
     editable: true,
     showable: true,
     deletable: true,

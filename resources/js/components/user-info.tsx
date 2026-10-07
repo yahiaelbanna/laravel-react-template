@@ -18,11 +18,11 @@ export function UserInfo({ user, showEmail = false }: { user: User; showEmail?: 
             </div>
             <div className="grid flex-1 text-start text-sm leading-tight group-data-[collapsible=icon]:hidden">
                 <span className="truncate font-semibold text-foreground text-[13px]">{user.name}</span>
-                {showEmail ? (
+                {/* {showEmail ? (
                     <span className="text-muted-foreground truncate text-[11px]">{user.email}</span>
                 ) : (
                     <span className="text-muted-foreground/80 truncate text-[11px]">متصل</span>
-                )}
+                )} */}
             </div>
         </>
     );

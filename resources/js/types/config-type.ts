@@ -16,21 +16,27 @@ export type Column = {
 }
 
 export default interface Config {
-    title: String;
-    pluralTitle: String;
-    modelName: String;
-    createLabel?: String;
-    editLabel?: String;
-    showLabel?: String;
-    deleteLabel?: String;
-    deleteConfirmTitle?: String;
-    deleteConfirmMessage?: String;
-    deleteSuccessMessage?: String;
-    deleteErrorMessage?: String;
-    createable?: Boolean;
-    editable?: Boolean;
-    showable?: Boolean;
-    deletable?: Boolean;
+    title: string;
+    pluralTitle: string;
+    modelName: string;
+
+    createLabel?: string;
+    editLabel?: string;
+    duplicateLabel?: string;
+    showLabel?: string;
+    deleteLabel?: string;
+
+    deleteConfirmTitle?: string;
+    deleteConfirmMessage?: string;
+    deleteSuccessMessage?: string;
+    deleteErrorMessage?: string;
+
+    createable?: boolean;
+    editable?: boolean;
+    duplicateable?: boolean;
+    showable?: boolean;
+    deletable?: boolean;
+
     viewTypes?: ViewTypes[];
 
     columns: Column[];

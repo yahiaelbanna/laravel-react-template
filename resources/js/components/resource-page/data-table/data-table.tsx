@@ -10,7 +10,7 @@ import NoDataFound from "./no-data-found";
 export default function DataTable({ config, data }: { config: Config, data: any[] }) {
     return (
         <Table className={data.length > 0 ? "" : "h-full!"}>
-            <DataTableHeader config={config} />
+            <DataTableHeader config={config} rows={data} />
             {data.length > 0 ? (
                 <DataTableBody config={config} data={data} />
             ) : (

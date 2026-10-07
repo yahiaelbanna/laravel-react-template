@@ -286,7 +286,7 @@ const SidebarInset = React.forwardRef<HTMLDivElement, React.ComponentProps<'main
         <main
             ref={ref}
             className={cn(
-                'relative flex min-h-svh flex-1 flex-col bg-background',
+                'relative flex min-h-svh max-h-screen flex-1 flex-col bg-background',
                 'peer-data-[variant=inset]:min-h-[calc(100svh-1rem)] md:peer-data-[variant=inset]:my-0 md:peer-data-[variant=inset]:rounded-none md:peer-data-[variant=inset]:border md:peer-data-[variant=inset]:border-sidebar-border/70 md:peer-data-[variant=inset]:shadow-xs md:peer-data-[variant=inset]:bg-background transition-[margin,border-radius] duration-200 ease-linear overflow-hidden',
                 'peer-data-[side=right]:md:peer-data-[variant=inset]:mr-0 peer-data-[side=right]:md:peer-data-[variant=inset]:ml-0 peer-data-[side=right]:md:peer-data-[variant=inset]:peer-data-[state=collapsed]:mr-0',
                 'peer-data-[side=left]:md:peer-data-[variant=inset]:ml-0 peer-data-[side=left]:md:peer-data-[variant=inset]:mr-0 peer-data-[side=left]:md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-0',

@@ -38,7 +38,9 @@ export default function ResourcePage({ config, data }: { config: Config, data: a
                     <h3 className="text-sm font-light bg-muted-foreground/5 p-2.5 border-accent/70 border-b">Filter Panel</h3>
                 </div>
                 {/* )} */}
-                <DataTable config={config} data={data} />
+                <div className="flex-1 min-h-0 h-full relative overflow-hidden">
+                    <DataTable config={config} data={data} />
+                </div>
             </div>
             {/* Table Section End */}
         </AppLayout>
