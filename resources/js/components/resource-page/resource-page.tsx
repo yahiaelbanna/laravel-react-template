@@ -7,9 +7,12 @@ import ToolBar from "./tool-bar";
 import DataTable from "./data-table/data-table";
 import Config from "@/types/config-type";
 import useFilterPanel from "@/hooks/resource-page/use-filter-panel";
+import useViewType from "@/hooks/resource-page/use-view-type";
+import KanbanView from "./kanban/kanban";
 
 export default function ResourcePage({ config, data }: { config: Config, data: any[] }) {
     const { panel } = useFilterPanel();
+    const { viewType } = useViewType({ viewTypes: config.viewTypes });
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -39,7 +42,8 @@ export default function ResourcePage({ config, data }: { config: Config, data: a
                 </div>
                 {/* )} */}
                 <div className="flex-1 min-h-0 h-full relative overflow-hidden">
-                    <DataTable config={config} data={data} />
+                    {viewType == "table" && <DataTable config={config} data={data} />}
+                    {viewType == "kanban" && <KanbanView config={config} data={data} />}
                 </div>
             </div>
             {/* Table Section End */}
