@@ -1,6 +1,7 @@
 import type { KanbanColumn, KanbanConfig } from "@/types/config-type";
 import KanbanCard from "./card";
-import { Ghost } from "lucide-react";
+// import { Ghost } from "lucide-react";
+import { Droppable } from "@hello-pangea/dnd";
 
 export default function KanbanColumn({ column, columnItems, kanbanConfig }: { column: KanbanColumn, columnItems: any[], kanbanConfig: KanbanConfig, }) {
     return (
@@ -13,17 +14,32 @@ export default function KanbanColumn({ column, columnItems, kanbanConfig }: { co
                 </span>
             </div>
 
-            <div className="flex-1 p-2.5 max-h-[calc(100vh-200px)] overflow-y-auto space-y-4 bg-sidebar/70">
-                {columnItems && columnItems.map((item) => (
-                    <KanbanCard key={item.id} item={item} kanbanConfig={kanbanConfig} />
-                ))}
-                {!columnItems?.length && (
-                    <div className="text-center h-full flex flex-col justify-center items-center text-muted-foreground font-mono">
-                        {/* <Ghost className="size-14 stroke-[1px] opacity-50" /> */}
-                        No items
+            <Droppable droppableId={String(column.id)}>
+                {(provided, snapshot) => (
+                    <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`flex-1 p-2.5 max-h-[calc(100vh-200px)] overflow-y-auto space-y-4 transition-colors ${snapshot.isDraggingOver ? "bg-accent/15" : "bg-sidebar/70"
+                            }`}
+                    >
+                        {columnItems.map((item, index) => (
+                            <KanbanCard
+                                key={item.id}
+                                item={item}
+                                index={index}
+                                kanbanConfig={kanbanConfig}
+                            />
+                        ))}
+                        {provided.placeholder}
+
+                        {!columnItems?.length && !snapshot.isDraggingOver && (
+                            <div className="text-center h-28 flex items-center justify-center text-muted-foreground text-xs font-mono">
+                                No items
+                            </div>
+                        )}
                     </div>
                 )}
-            </div>
+            </Droppable>
         </div>
     );
 }
