@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { TableCell } from "@/components/ui/table";
+import { formatNumberWithCommas } from "@/lib/format-utills";
 import { BadgeVariant, Column } from "@/types/config-type";
 
 export default function DataTableCell({ column, value }: { column: Column, value: any }) {
@@ -40,8 +41,7 @@ function CurrencyCell({ value }: { value: any }) {
         </span>
     ) : (
         <div>
-            {/* {formatNumberWithCommas(value, true)} */}
-            {value}
+            {formatNumberWithCommas(value, true)}
             <span className="text-muted-foreground ml-1 text-[10px]">
                 EGP
             </span>
@@ -56,8 +56,7 @@ function NumberCell({ value }: { value: any }) {
         </span>
     ) : (
         <div>
-            {/* {formatNumberWithCommas(value, true)} */}
-            {value}
+            {formatNumberWithCommas(value, true)}
         </div>
     )
 }

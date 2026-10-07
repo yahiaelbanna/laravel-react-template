@@ -12,9 +12,27 @@ export type Column = {
     // displayable?: boolean;
     // format?: string;
     // renderer?: (value: any) => React.ReactNode;
-
 }
 
+export type KanbanColumn = {
+    id: string;
+    title: string;
+    color?: string;
+};
+
+export type KanbanCardMapping = {
+    titleKey: string;
+    codeKey?: string;
+    descriptionKey?: string;
+    dateKey?: string;
+    badgeKeys?: string[];
+};
+
+export type KanbanConfig = {
+    groupByKey: string;
+    columns: KanbanColumn[];
+    card: KanbanCardMapping;
+};
 export default interface Config {
     title: string;
     pluralTitle: string;
@@ -40,6 +58,7 @@ export default interface Config {
     viewTypes?: ViewTypes[];
 
     columns: Column[];
+    kanbanSchema: KanbanConfig;
 }
 
 

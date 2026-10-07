@@ -14,6 +14,7 @@ export default function TasksIndex() {
             balance: 4002,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 2,
@@ -24,6 +25,7 @@ export default function TasksIndex() {
             balance: 6534,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "published"
         },
         {
             id: 3,
@@ -34,6 +36,7 @@ export default function TasksIndex() {
             balance: 10011,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "published"
         },
         {
             id: 4,
@@ -44,6 +47,7 @@ export default function TasksIndex() {
             balance: 4002,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 5,
@@ -54,6 +58,7 @@ export default function TasksIndex() {
             balance: 6534,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 6,
@@ -64,6 +69,7 @@ export default function TasksIndex() {
             balance: 10011,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 7,
@@ -74,6 +80,7 @@ export default function TasksIndex() {
             balance: 4002,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 8,
@@ -84,6 +91,7 @@ export default function TasksIndex() {
             balance: 6534,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 9,
@@ -94,6 +102,7 @@ export default function TasksIndex() {
             balance: 10011,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 10,
@@ -104,6 +113,7 @@ export default function TasksIndex() {
             balance: 4002,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 11,
@@ -114,6 +124,7 @@ export default function TasksIndex() {
             balance: 6534,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 12,
@@ -124,6 +135,7 @@ export default function TasksIndex() {
             balance: 10011,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 13,
@@ -134,6 +146,7 @@ export default function TasksIndex() {
             balance: 4002,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 14,
@@ -144,6 +157,7 @@ export default function TasksIndex() {
             balance: 6534,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 15,
@@ -154,6 +168,7 @@ export default function TasksIndex() {
             balance: 10011,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 16,
@@ -164,6 +179,7 @@ export default function TasksIndex() {
             balance: 4002,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 17,
@@ -174,6 +190,7 @@ export default function TasksIndex() {
             balance: 6534,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 18,
@@ -184,6 +201,7 @@ export default function TasksIndex() {
             balance: 10011,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 19,
@@ -194,6 +212,7 @@ export default function TasksIndex() {
             balance: 4002,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 20,
@@ -204,6 +223,7 @@ export default function TasksIndex() {
             balance: 6534,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 21,
@@ -214,6 +234,7 @@ export default function TasksIndex() {
             balance: 10011,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 22,
@@ -224,6 +245,7 @@ export default function TasksIndex() {
             balance: 4002,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 23,
@@ -234,6 +256,7 @@ export default function TasksIndex() {
             balance: 6534,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
         {
             id: 24,
@@ -244,6 +267,7 @@ export default function TasksIndex() {
             balance: 10011,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",
+            status: "draft"
         },
     ];
 
