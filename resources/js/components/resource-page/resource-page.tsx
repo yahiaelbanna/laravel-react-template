@@ -6,12 +6,12 @@ import { Head } from "@inertiajs/react";
 import ToolBar from "./tool-bar";
 import DataTable from "./data-table/data-table";
 import Config from "@/types/config-type";
-import useFilterPanel from "@/hooks/resource-page/use-filter-panel";
 import useViewType from "@/hooks/resource-page/use-view-type";
 import KanbanView from "./kanban/kanban";
+import FilterPanel from "./filter-panel";
 
 export default function ResourcePage({ config, data }: { config: Config, data: any[] }) {
-    const { panel } = useFilterPanel();
+
     const { viewType } = useViewType({ viewTypes: config.viewTypes });
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -36,11 +36,9 @@ export default function ResourcePage({ config, data }: { config: Config, data: a
             {/* Table Section Start */}
 
             <div className={`w-full h-full flex`}>
-                {/* {panel && ( */}
-                <div className={`h-full shrink-0 transition-all duration-300 ease-out overflow-hidden truncate border-accent/70 border-0 ${panel ? 'w-72 border-e' : 'w-0'}`}>
-                    <h3 className="text-sm font-light bg-muted-foreground/5 p-2.5 border-accent/70 border-b">Filter Panel</h3>
-                </div>
-                {/* )} */}
+                {config.filters && (
+                    <FilterPanel config={config} />
+                )}
                 <div className="flex-1 min-h-0 h-full relative overflow-hidden">
                     {viewType == "table" && <DataTable config={config} data={data} />}
                     {viewType == "kanban" && <KanbanView config={config} data={data} />}

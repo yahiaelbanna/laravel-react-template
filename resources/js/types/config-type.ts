@@ -33,6 +33,24 @@ export type KanbanConfig = {
     columns: KanbanColumn[];
     card: KanbanCardMapping;
 };
+
+export type FieldConfig = {
+    key: string;
+    label?: string;
+    placeholder?: string;
+    defaultValue?: string | number | boolean | Date;
+    required?: boolean;
+    disabled?: boolean;
+    readonly?: boolean;
+    tooltip?: string;
+    hidden?: boolean;
+    className?: string;
+
+    type: FiledType;
+
+};
+
+
 export default interface Config {
     title: string;
     pluralTitle: string;
@@ -59,6 +77,8 @@ export default interface Config {
 
     columns: Column[];
     kanbanSchema: KanbanConfig;
+
+    filters?: FieldConfig[];
 }
 
 
@@ -76,3 +96,5 @@ export type BadgeVariant =
     "default" | "secondary" | "destructive" | "outline";
 
 export type ViewTypes = 'table' | 'kanban';
+
+export type FiledType = "text" | "email" | "number" | "date" | "datetime" | "currency";

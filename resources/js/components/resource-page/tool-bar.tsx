@@ -13,13 +13,18 @@ export default function ToolBar({ config }: { config: Config }) {
 
         <div className="border-y py-3 px-4 items-center justify-between flex">
             <div className="flex items-center gap-2">
-                <Button variant={'ghost'} size={'sm'}
-                    onClick={togglePanel}
-                >
-                    <Filter className="size-3" />
-                    Filter
-                </Button>
-                <div className="h-6 border-[1px]"></div>
+                {config.filters && (
+                    <>
+                        <Button variant={'ghost'} size={'sm'}
+                            onClick={togglePanel}
+                        >
+                            <Filter className="size-3" />
+                            Filter
+                        </Button>
+                        <div className="h-6 border-[1px]"></div>
+                    </>
+                )}
+
                 <div className="flex gap-1.5 items-center">
                     {(config.viewTypes?.includes('table') || !config.viewTypes || config.viewTypes?.length === 0) && (
                         <ViewTypeButton viewType={viewType} changeView={changeView} type="table" icon={Table2} />

@@ -1,6 +1,7 @@
 import Config from "@/types/config-type";
 import { columns } from "./table-schema";
 import { kanbanConfig } from "./kanban-schema";
+import { filtersSchema } from "./filters-schema";
 
 const config: Config = {
     title: "Module",
@@ -28,6 +29,8 @@ const config: Config = {
 
     columns: columns,
     kanbanSchema: kanbanConfig,
+
+    filters: filtersSchema
 };
 
 export default config;
