@@ -9,10 +9,14 @@ import Config from "@/types/config-type";
 import useViewType from "@/hooks/resource-page/use-view-type";
 import KanbanView from "./kanban/kanban";
 import FilterPanel from "./filter-panel";
+import useSelection from "@/hooks/resource-page/use-selection";
+import ActionBar from "./action-bar";
 
 export default function ResourcePage({ config, data }: { config: Config, data: any[] }) {
 
     const { viewType } = useViewType({ viewTypes: config.viewTypes });
+
+    const { count } = useSelection();
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -30,7 +34,16 @@ export default function ResourcePage({ config, data }: { config: Config, data: a
             <Head title={String(config.pluralTitle)} />
 
             {/* Tool Bar Section Start */}
-            <ToolBar config={config} />
+            <div className="border-y h-18 overflow-hidden relative">
+                <div className={`absolute w-full transition-all duration-500 ease-in-out ${count > 0 ? '-top-full' : 'top-0'} `} >
+
+                    <ToolBar config={config} />
+
+                    <ActionBar config={config} />
+
+
+                </div>
+            </div>
             {/* Tool Bar Section End */}
 
             {/* Table Section Start */}
@@ -45,6 +58,6 @@ export default function ResourcePage({ config, data }: { config: Config, data: a
                 </div>
             </div>
             {/* Table Section End */}
-        </AppLayout>
+        </AppLayout >
     );
 }

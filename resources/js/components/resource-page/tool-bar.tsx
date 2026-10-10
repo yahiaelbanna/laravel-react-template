@@ -4,14 +4,15 @@ import { Upload, Download, Filter, Kanban, Table2, Plus, LucideIcon } from "luci
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import useViewType from "@/hooks/resource-page/use-view-type";
 import useFilterPanel from "@/hooks/resource-page/use-filter-panel";
+import { cn } from "@/lib/utils";
 
-export default function ToolBar({ config }: { config: Config }) {
+export default function ToolBar({ config, className }: { config: Config, className?: string }) {
     const { viewType, changeView } = useViewType({ viewTypes: config.viewTypes });
     const { togglePanel } = useFilterPanel();
 
     return (
 
-        <div className="border-y py-3 px-4 items-center justify-between flex">
+        <div className={cn('h-15 px-4 py-3 items-center justify-between flex ', className)}>
             <div className="flex items-center gap-2">
                 {config.filters && (
                     <>
