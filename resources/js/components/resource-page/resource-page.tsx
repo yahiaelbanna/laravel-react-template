@@ -12,7 +12,7 @@ import FilterPanel from "./filter-panel";
 import useSelection from "@/hooks/resource-page/use-selection";
 import ActionBar from "./action-bar";
 
-export default function ResourcePage({ config, data }: { config: Config, data: any[] }) {
+export default function ResourcePage({ config, data, actions }: { config: Config, data: any[], actions: any }) {
 
     const { viewType } = useViewType({ viewTypes: config.viewTypes });
 
@@ -39,7 +39,7 @@ export default function ResourcePage({ config, data }: { config: Config, data: a
 
                     <ToolBar config={config} />
 
-                    <ActionBar config={config} />
+                    <ActionBar config={config} actions={actions} />
 
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import ResourcePage from "@/components/resource-page/resource-page";
-import config from "@/pages/module/config";
-
+import config from "@/pages/module/config/config";
+import { useActions } from "./actions/bulk-actions";
 
 
 export default function TasksIndex() {
@@ -270,8 +270,8 @@ export default function TasksIndex() {
             status: "draft"
         },
     ];
-
+    const actions = useActions();
     return (
-        <ResourcePage config={config} data={data} />
+        <ResourcePage config={config} data={data} actions={actions} />
     );
 }

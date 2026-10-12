@@ -397,7 +397,7 @@ const SidebarMenu = React.forwardRef<HTMLUListElement, React.ComponentProps<'ul'
 SidebarMenu.displayName = 'SidebarMenu';
 
 const SidebarMenuItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li'>>(({ className, ...props }, ref) => (
-    <li ref={ref} data-sidebar="menu-item" className={cn('group/menu-item relative', className)} {...props} />
+    <li ref={ref} data-sidebar="menu-item" className={cn('group/menu-item relative flex justify-center', className)} {...props} />
 ));
 SidebarMenuItem.displayName = 'SidebarMenuItem';
 
