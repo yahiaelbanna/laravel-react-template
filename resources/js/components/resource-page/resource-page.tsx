@@ -41,7 +41,6 @@ export default function ResourcePage({ config, data }: { config: Config, data: a
 
                     <ActionBar config={config} />
 
-
                 </div>
             </div>
             {/* Tool Bar Section End */}

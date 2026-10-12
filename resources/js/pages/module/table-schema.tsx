@@ -1,4 +1,5 @@
-import { Column } from "@/types/config-type";
+import { BulkAction, Column } from "@/types/config-type";
+import { Pencil, Trash } from "lucide-react";
 
 export const columns: Column[] = [
     {
@@ -35,5 +36,20 @@ export const columns: Column[] = [
         key: "updated_at",
         title: "Updated At",
         type: "date",
+    },
+];
+
+export const bulkActions: BulkAction[] = [
+    {
+        key: "mass-delete",
+        label: "Delete",
+        icon: Trash,
+        variant: "destructive",
+    },
+    {
+        key: "mass-edit",
+        label: "Edit",
+        icon: Pencil,
+        variant: "outline",
     },
 ];

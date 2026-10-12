@@ -1,3 +1,5 @@
+import { LucideIcon } from "lucide-react";
+
 export type Column = {
     key: string;
     title: string;
@@ -50,6 +52,12 @@ export type FieldConfig = {
 
 };
 
+export type BulkAction = {
+    key: string;
+    label: string;
+    icon?: LucideIcon;
+    variant?: BadgeVariant;
+};
 
 export default interface Config {
     title: string;
@@ -79,6 +87,7 @@ export default interface Config {
     kanbanSchema: KanbanConfig;
 
     filters?: FieldConfig[];
+    bulkActions?: BulkAction[];
 }
 
 
