@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { route as routeFn } from 'ziggy-js';
 import { initializeTheme } from './hooks/use-appearance';
 import { DialogProvider } from './components/providers/dialog-provider';
+import { Toaster } from "./components/ui/sonner";
 
 declare global {
     const route: typeof routeFn;
@@ -22,6 +23,7 @@ createInertiaApp({
         root.render(
             <DialogProvider>
                 <App {...props} />
+                <Toaster position='top-right' richColors />
             </DialogProvider>
         );
     },

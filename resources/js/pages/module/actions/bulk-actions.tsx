@@ -1,5 +1,6 @@
 import { useDialog } from "@/components/providers/dialog-provider"
 import useSelection from "@/hooks/resource-page/use-selection";
+import { toast } from "sonner";
 
 export function useActions() {
     const dialog = useDialog();
@@ -15,7 +16,8 @@ export function useActions() {
             });
 
             if (confirmed) {
-                console.log('Deleted');
+                // console.log('Deleted');
+                toast.success("Items deleted successfully");
                 clear();
             }
         }
