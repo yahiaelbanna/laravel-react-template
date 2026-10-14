@@ -11,12 +11,16 @@ import KanbanView from "./kanban/kanban";
 import FilterPanel from "./filter-panel";
 import useSelection from "@/hooks/resource-page/use-selection";
 import ActionBar from "./action-bar";
+import useDrawerSync from "@/hooks/resource-page/use-drawer-sync";
+import RowDrawer from "./row-drawer";
 
 export default function ResourcePage({ config, data, actions }: { config: Config, data: any[], actions: any }) {
 
     const { viewType } = useViewType({ viewTypes: config.viewTypes });
 
     const { count } = useSelection();
+
+    const { selectedRow } = useDrawerSync();
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -57,6 +61,8 @@ export default function ResourcePage({ config, data, actions }: { config: Config
                 </div>
             </div>
             {/* Table Section End */}
+
+            {selectedRow && <RowDrawer config={config} />}
         </AppLayout >
     );
 }

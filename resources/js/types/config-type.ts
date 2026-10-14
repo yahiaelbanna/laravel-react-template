@@ -5,6 +5,7 @@ export type Column = {
     title: string;
     type?: columnType;
     options?: Record<string, BadgeVariant>;
+    preventDrawer?: boolean;
     // sortable?: boolean;
     // searchable?: boolean;
     // filterable?: boolean;
@@ -59,6 +60,14 @@ export type BulkAction = {
     variant?: BadgeVariant;
 };
 
+export type RowDrawerConfig = {
+    endpoint?: string | ((row: any) => string);
+    title?: string | ((row: any) => string);
+    description?: string | ((row: any) => string);
+    component?: React.ComponentType<{ row: any; onClose?: () => void, loading?: boolean }>;
+    width?: string;
+}
+
 export default interface Config {
     title: string;
     pluralTitle: string;
@@ -88,6 +97,8 @@ export default interface Config {
 
     filters?: FieldConfig[];
     bulkActions?: BulkAction[];
+
+    rowDrawer?: RowDrawerConfig;
 }
 
 

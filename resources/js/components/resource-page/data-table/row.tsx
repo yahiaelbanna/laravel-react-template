@@ -13,13 +13,31 @@ import { Copy, Eye, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import DataTableCell from "./cell";
 import Config from "@/types/config-type";
 import useSelection from "@/hooks/resource-page/use-selection";
+import useDrawerSync from "@/hooks/resource-page/use-drawer-sync";
 
 
 
 export default function DataTableRow({ config, item }: { config: Config, item: any }) {
     const { isSelected, toggle } = useSelection();
+
+    const { open } = useDrawerSync();
+
+    const handleRowClick = (e: React.MouseEvent) => {
+        if (!config.rowDrawer) return;
+
+        if (e.detail > 1) return;
+
+        const selectionText = window.getSelection()?.toString();
+        if (selectionText && selectionText.trim().length > 0) return;
+
+        const target = e.target as HTMLElement;
+        if (target.closest('[data-prevent-click="true"], button, a, input, [role="checkbox"], [role="menu"],[role="button"]') || target.closest('.action-cell')) return;
+
+
+        open(item);
+    }
     return (
-        <TableRow>
+        <TableRow onClick={handleRowClick}>
 
             <TableCell>
                 <Checkbox
@@ -32,7 +50,7 @@ export default function DataTableRow({ config, item }: { config: Config, item: a
             {config.columns.map((column) => (
                 <DataTableCell key={column.key} column={column} value={item[column.key]} />
             ))}
-            <TableCell>
+            <TableCell className="action-cell">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="p-0 size-7"><MoreVertical /></Button>

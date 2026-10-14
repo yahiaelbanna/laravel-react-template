@@ -2,6 +2,7 @@ import Config from "@/types/config-type";
 import { bulkActions, columns } from "./table-schema";
 import { kanbanConfig } from "./kanban-schema";
 import { filtersSchema } from "./filters-schema";
+import { rowDrawer } from "./drawer-schema";
 
 const config: Config = {
     title: "Module",
@@ -31,7 +32,9 @@ const config: Config = {
     kanbanSchema: kanbanConfig,
 
     filters: filtersSchema,
-    bulkActions: bulkActions
+    bulkActions: bulkActions,
+
+    rowDrawer: rowDrawer,
 };
 
 export default config;

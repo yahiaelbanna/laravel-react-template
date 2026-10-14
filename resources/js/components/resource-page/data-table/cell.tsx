@@ -4,8 +4,9 @@ import { formatNumberWithCommas } from "@/lib/format-utills";
 import { BadgeVariant, Column } from "@/types/config-type";
 
 export default function DataTableCell({ column, value }: { column: Column, value: any }) {
+    const preventClick = column.preventDrawer === true;
     return (
-        <TableCell>
+        <TableCell data-prevent-click={preventClick}>
             {(() => {
                 switch (column.type) {
                     case "text":
