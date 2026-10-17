@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import useViewType from "@/hooks/resource-page/use-view-type";
 import useFilterPanel from "@/hooks/resource-page/use-filter-panel";
 import { cn } from "@/lib/utils";
+import { Link } from "@inertiajs/react";
 
 export default function ToolBar({ config, className }: { config: Config, className?: string }) {
     const { viewType, changeView } = useViewType({ viewTypes: config.viewTypes });
@@ -38,7 +39,11 @@ export default function ToolBar({ config, className }: { config: Config, classNa
             <div className="flex gap-2 items-center">
                 {/* <Button variant={"outline"} size={'sm'}><Upload className="opacity-60" />Import</Button>
                 <Button variant={"outline"} size={'sm'}><Download className="opacity-60" />Export</Button> */}
-                <Button size={'sm'}><Plus />{config.createLabel ?? ('Add ' + config.title)}</Button>
+                <Button size={'sm'} asChild>
+                    <Link href={route(`${config.modelName}.create`)}>
+                        <Plus />{config.createLabel ?? ('Add ' + config.title)}
+                    </Link>
+                </Button>
             </div>
         </div>
     );

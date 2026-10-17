@@ -3,6 +3,7 @@ import { bulkActions, columns } from "./table-schema";
 import { kanbanConfig } from "./kanban-schema";
 import { filtersSchema } from "./filters-schema";
 import { rowDrawer } from "./drawer-schema";
+import { formSchema } from "./form-schema";
 
 const config: Config = {
     title: "Module",
@@ -35,6 +36,8 @@ const config: Config = {
     bulkActions: bulkActions,
 
     rowDrawer: rowDrawer,
+
+    form: formSchema,
 };
 
 export default config;

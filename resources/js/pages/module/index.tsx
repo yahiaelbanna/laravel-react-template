@@ -21,7 +21,7 @@ export default function TasksIndex() {
             name: "Task 2",
             email: "[EMAIL_ADDRESS]",
             phone: "1234567890",
-            address: "123 Main St",
+            address: "test",
             balance: 6534,
             created_at: "2022-01-01",
             updated_at: "2022-01-01",

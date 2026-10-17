@@ -1,10 +1,11 @@
-import type { FieldConfig } from "@/types/config-type";
+import type { FieldConfig } from "@/types/form-config-type";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Info } from "lucide-react";
+import { Textarea } from "../ui/textarea";
 
-export default function FieldRenderer({ field }: { field: FieldConfig }) {
+export default function FieldRenderer({ field, labelClass }: { field: FieldConfig, labelClass?: string }) {
     const attributes = {
         id: field.key,
         name: field.key,
@@ -16,7 +17,7 @@ export default function FieldRenderer({ field }: { field: FieldConfig }) {
     };
 
     return (
-        <FieldContainer field={field}>
+        <FieldContainer field={field} labelClass={labelClass}>
             {
                 (() => {
                     switch (field.type) {
@@ -26,6 +27,8 @@ export default function FieldRenderer({ field }: { field: FieldConfig }) {
                             return <Input type="email" inputMode="email" {...attributes} />;
                         case "number":
                             return <Input type="number" inputMode="numeric" {...attributes} />;
+                        case "textArea":
+                            return <Textarea {...attributes} />;
                         default:
                             return <Input type="text" {...attributes} />;
                     }
@@ -36,10 +39,10 @@ export default function FieldRenderer({ field }: { field: FieldConfig }) {
 
 }
 
-function FieldContainer({ field, children }: { field: FieldConfig, children: React.ReactNode }) {
+function FieldContainer({ field, children, labelClass }: { field: FieldConfig, children: React.ReactNode, labelClass?: string }) {
     return (
-        <div className="flex flex-col">
-            <Label htmlFor={field.key} className="py-1.5 font-light text-xs text-muted-foreground flex items-center">{field.label}
+        <div className="flex flex-col max-w-164">
+            <Label htmlFor={field.key} className={`py-1.5 font-light text-[13px] flex items-center ${labelClass}`}>{field.label}
 
                 {field.required ? <span className="text-red-400 ms-0.5">*</span> : null}
 

@@ -13,6 +13,6 @@ class ModuleController extends Controller
 
     public function create()
     {
-        return Inertia::render('module/index');
+        return Inertia::render('module/create');
     }
 }

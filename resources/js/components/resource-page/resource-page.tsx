@@ -29,7 +29,7 @@ export default function ResourcePage({ config, data, actions }: { config: Config
         },
         {
             title: String(config.pluralTitle),
-            href: `/${config.modelName}`,
+            href: route(`${config.modelName}.index`),
         },
     ];
 
@@ -38,7 +38,7 @@ export default function ResourcePage({ config, data, actions }: { config: Config
             <Head title={String(config.pluralTitle)} />
 
             {/* Tool Bar Section Start */}
-            <div className="border-y h-18 overflow-hidden relative">
+            <div className="border-y min-h-15.5 overflow-hidden relative">
                 <div className={`absolute w-full transition-all duration-500 ease-in-out ${count > 0 ? '-top-full' : 'top-0'} `} >
 
                     <ToolBar config={config} />

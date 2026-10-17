@@ -23,7 +23,7 @@ export default function FilterPanel({ config }: { config: Config }) {
                     <div className="p-3.5 pt-4 space-y-4">
                         {fields?.map((field, index) => (
                             <div key={`${field.key}-${index}`}>
-                                <FieldRenderer field={field} />
+                                <FieldRenderer field={field} labelClass="text-muted-foreground text-xs" />
                             </div>
                         ))}
                     </div>

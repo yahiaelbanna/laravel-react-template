@@ -16,7 +16,7 @@ export default function RowDrawer({ config }: { config: Config }) {
     return (
         <Sheet open={!!selectedRow} onOpenChange={(open) => !open && close()}>
             <SheetContent className={cn(
-                "h-full p-0 overflow-hidden shadow-2xl border-l border-border/60 bg-background/95 backdrop-blur-md",
+                "h-full p-0 overflow-hidden shadow-2xl border-l border-border/60",
                 (config.rowDrawer?.width || "sm:max-w-3xl")
             )}>
 

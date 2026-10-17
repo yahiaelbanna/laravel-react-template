@@ -1,4 +1,5 @@
 import { LucideIcon } from "lucide-react";
+import { FieldConfig, ResourceForm } from "./form-config-type";
 
 export type Column = {
     key: string;
@@ -6,6 +7,7 @@ export type Column = {
     type?: columnType;
     options?: Record<string, BadgeVariant>;
     preventDrawer?: boolean;
+
     // sortable?: boolean;
     // searchable?: boolean;
     // filterable?: boolean;
@@ -37,21 +39,7 @@ export type KanbanConfig = {
     card: KanbanCardMapping;
 };
 
-export type FieldConfig = {
-    key: string;
-    label?: string;
-    placeholder?: string;
-    defaultValue?: string | number | boolean | Date;
-    required?: boolean;
-    disabled?: boolean;
-    readonly?: boolean;
-    tooltip?: string;
-    hidden?: boolean;
-    className?: string;
 
-    type: FiledType;
-
-};
 
 export type BulkAction = {
     key: string;
@@ -99,6 +87,8 @@ export default interface Config {
     bulkActions?: BulkAction[];
 
     rowDrawer?: RowDrawerConfig;
+
+    form?: ResourceForm;
 }
 
 
@@ -116,5 +106,3 @@ export type BadgeVariant =
     "default" | "secondary" | "destructive" | "outline";
 
 export type ViewTypes = 'table' | 'kanban';
-
-export type FiledType = "text" | "email" | "number" | "date" | "datetime" | "currency";
