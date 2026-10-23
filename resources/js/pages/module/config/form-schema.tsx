@@ -88,6 +88,42 @@ export const formSchema: ResourceForm = [
                 },
                 getOptionLabel: (item: any) => item.name,
                 getOptionValue: (item: any) => item.id,
+            },
+            {
+                key: "apiSelect1",
+                label: "API Select",
+                placeholder: "API Select",
+                type: "apiSelect",
+                options: {
+                    endpoint: "/api/data",
+                },
+                getOptionLabel: (item: any) => {
+                    return (
+                        <div className="flex items-center">
+                            <div className="flex size-5 rounded-lg items-center justify-center bg-primary text-primary-foreground mr-2">
+                                {item.name[0]}
+                            </div>
+                            <div className="flex flex-col">
+                                <div className="font-medium">{item.name}</div>
+                                {/* <div className="text-[10px] text-muted-foreground">{item.description}</div> */}
+                            </div>
+                        </div>
+                    )
+                },
+                getOptionValue: (item: any) => item.id,
+                multiple: true,
+            },
+            {
+                key: "apiSelect21",
+                label: "API Select 2",
+                placeholder: "API Select 2",
+                type: "apiSelect",
+                options: {
+                    endpoint: "/api/data",
+                },
+                getOptionLabel: (item: any) => item.name,
+                getOptionValue: (item: any) => item.id,
+                multiple: true,
             }
         ],
     },

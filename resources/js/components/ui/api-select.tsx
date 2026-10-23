@@ -1,19 +1,21 @@
 import * as React from 'react';
 import { Check, ChevronDown, Loader2, RefreshCw, Search, X } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { get } from '@/services/api.service';
 import { ApiSelectConfig } from '@/types/form-config-type';
 
 export interface ApiSelectProps<T> {
     field: ApiSelectConfig<T>;
-    value?: string | number;
-    defaultValue?: string | number;
-    onChange?: (value: string, item: T | null) => void;
+    value?: string | number | (string | number)[];
+    defaultValue?: string | number | (string | number)[];
+    onChange?: (value: any, item: any) => void;
     className?: string;
     triggerClassName?: string;
     contentClassName?: string;
     labelClass?: string;
+    maxDisplayTags?: number;
 }
 
 export default function ApiSelect<T>({
@@ -24,7 +26,9 @@ export default function ApiSelect<T>({
     className,
     triggerClassName,
     contentClassName,
+    maxDisplayTags = 3,
 }: ApiSelectProps<T>) {
+    const isMultiple = Boolean(field.multiple);
     const [open, setOpen] = React.useState(false);
     const [searchQuery, setSearchQuery] = React.useState('');
     const [debouncedSearch, setDebouncedSearch] = React.useState('');
@@ -33,16 +37,38 @@ export default function ApiSelect<T>({
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
 
-    // Support both controlled and uncontrolled selection
+    // Cache of fetched items by value so tags retain their data even when search query changes
+    const itemsCache = React.useRef<Map<string, T>>(new Map());
+
+    // Normalize value to array of strings
+    const parseValues = (val: unknown): string[] => {
+        if (val === undefined || val === null || val === '') return [];
+        return (Array.isArray(val) ? val : [val]).map(String);
+    };
+
+    // Support controlled and uncontrolled usage
     const isControlled = value !== undefined;
-    const [internalValue, setInternalValue] = React.useState<string>(() => {
+    const [internalValues, setInternalValues] = React.useState<string[]>(() => {
         const initial = value !== undefined ? value : (defaultValue ?? field.defaultValue);
-        return initial !== undefined && initial !== null ? String(initial) : '';
+        return parseValues(initial);
     });
 
-    const selectedValue = isControlled ? (value !== undefined ? String(value) : '') : internalValue;
+    const selectedStrings = React.useMemo(() => {
+        const raw = isControlled ? value : internalValues;
+        return parseValues(raw);
+    }, [isControlled, value, internalValues]);
 
-    // Debounce the search input to avoid hitting the API on every keystroke
+    const selectedValue = selectedStrings[0] || '';
+
+    // Cache items whenever new ones are fetched
+    React.useEffect(() => {
+        items.forEach((item) => {
+            const val = String(field.getOptionValue(item));
+            itemsCache.current.set(val, item);
+        });
+    }, [items, field]);
+
+    // Debounce the search input
     React.useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedSearch(searchQuery);
@@ -89,14 +115,42 @@ export default function ApiSelect<T>({
     }, [fetchData]);
 
     const handleSelect = (item: T) => {
-        const itemVal = field.getOptionValue(item);
-        const next = selectedValue === itemVal ? '' : itemVal;
+        const itemVal = String(field.getOptionValue(item));
+        itemsCache.current.set(itemVal, item);
 
-        if (!isControlled) {
-            setInternalValue(next);
+        if (isMultiple) {
+            const next = selectedStrings.includes(itemVal)
+                ? selectedStrings.filter((v) => v !== itemVal)
+                : [...selectedStrings, itemVal];
+
+            if (!isControlled) {
+                setInternalValues(next);
+            }
+            const selectedItems = next.map((val) => itemsCache.current.get(val)).filter(Boolean) as T[];
+            onChange?.(next, selectedItems);
+            // Keep open so multiple items can be chosen
+        } else {
+            const next = selectedValue === itemVal ? '' : itemVal;
+            const nextArray = next ? [next] : [];
+
+            if (!isControlled) {
+                setInternalValues(nextArray);
+            }
+            onChange?.(next, next === '' ? null : item);
+            setOpen(false);
         }
-        onChange?.(next, next === '' ? null : item);
-        setOpen(false);
+    };
+
+    const handleRemoveTag = (e: React.MouseEvent, val: string) => {
+        e.stopPropagation();
+        if (field.disabled || field.readonly) return;
+
+        const next = selectedStrings.filter((v) => v !== val);
+        if (!isControlled) {
+            setInternalValues(next);
+        }
+        const selectedItems = next.map((v) => itemsCache.current.get(v)).filter(Boolean) as T[];
+        onChange?.(next, selectedItems);
     };
 
     const handleClear = (e: React.MouseEvent) => {
@@ -104,21 +158,25 @@ export default function ApiSelect<T>({
         if (field.disabled || field.readonly) return;
 
         if (!isControlled) {
-            setInternalValue('');
+            setInternalValues([]);
         }
-        onChange?.('', null);
+        if (isMultiple) {
+            onChange?.([], []);
+        } else {
+            onChange?.('', null);
+        }
     };
-
-    // Find the currently selected item object to display its label
-    const selectedItem = React.useMemo(() => {
-        if (!selectedValue) return null;
-        return items.find((item) => field.getOptionValue(item) === selectedValue) || null;
-    }, [items, selectedValue, field]);
 
     return (
         <div className={cn('relative w-full', className)}>
-            {/* Hidden input for HTML / Inertia form bindings */}
-            {field.key && <input type="hidden" name={field.key} value={selectedValue} />}
+            {/* Hidden input(s) for HTML / Inertia form bindings */}
+            {field.key &&
+                (isMultiple
+                    ? selectedStrings.map((val) => (
+                        <input key={val} type="hidden" name={`${field.key}[]`} value={val} />
+                    ))
+                    : <input type="hidden" name={field.key} value={selectedValue} />
+                )}
 
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild disabled={field.disabled}>
@@ -129,25 +187,84 @@ export default function ApiSelect<T>({
                         aria-expanded={open}
                         disabled={field.disabled}
                         className={cn(
-                            'flex h-9.5 w-full items-center justify-between gap-1.5 rounded-md border border-input bg-background px-3 py-2 text-base md:text-xs font-light ring-offset-background text-start transition-colors',
+                            'flex w-full items-center justify-between gap-1.5 rounded-md border border-input bg-background text-base md:text-xs font-light ring-offset-background text-start transition-colors',
+                            isMultiple ? 'min-h-9.5 h-auto px-3 py-1.5' : 'h-9.5 px-3 py-2',
                             'focus:outline-hidden focus:ring-2 focus:ring-ring/15 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
                             open && 'ring-2 ring-ring/15 ring-offset-2 border-input',
                             field.className,
                             triggerClassName
                         )}
                     >
-                        <span className="flex-1 truncate">
-                            {selectedItem ? (
-                                <span className="text-foreground">{field.getOptionLabel(selectedItem)}</span>
-                            ) : (
-                                <span className="text-muted-foreground select-none">
-                                    {field.placeholder || 'Select an option...'}
-                                </span>
-                            )}
-                        </span>
+                        {isMultiple ? (
+                            <div className="flex flex-1 flex-wrap items-center gap-1 overflow-hidden py-0.5">
+                                {selectedStrings.length === 0 ? (
+                                    <span className="text-muted-foreground select-none">
+                                        {field.placeholder || 'Select options...'}
+                                    </span>
+                                ) : (
+                                    <>
+                                        {selectedStrings.slice(0, maxDisplayTags).map((val) => {
+                                            const item = itemsCache.current.get(val);
+                                            const label = item ? field.getOptionLabel(item) : val;
+
+                                            return (
+                                                <Badge
+                                                    key={val}
+                                                    variant="secondary"
+                                                    className="px-1.5 py-0 h-fit text-base md:text-[11px] font-normal max-w-[150px] truncate flex items-center gap-1 group/badge bg-muted text-foreground/90 border-0"
+                                                >
+                                                    <span className="truncate">{label}</span>
+                                                    {!field.disabled && !field.readonly && (
+                                                        <span
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={(e) => handleRemoveTag(e, val)}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter' || e.key === ' ') {
+                                                                    e.preventDefault();
+                                                                    handleRemoveTag(e as any, val);
+                                                                }
+                                                            }}
+                                                            className="opacity-50 hover:opacity-100 rounded-full hover:bg-muted-foreground/20 p-0.5 transition-opacity"
+                                                        >
+                                                            <X className="size-2.5" />
+                                                        </span>
+                                                    )}
+                                                </Badge>
+                                            );
+                                        })}
+                                        {selectedStrings.length > maxDisplayTags && (
+                                            <Badge
+                                                variant="secondary"
+                                                className="px-1.5 py-0 text-base md:text-[11px] font-normal shrink-0 bg-muted text-muted-foreground border-0"
+                                            >
+                                                +{selectedStrings.length - maxDisplayTags} more
+                                            </Badge>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                        ) : (
+                            <span className="flex-1 truncate">
+                                {selectedStrings.length > 0 ? (
+                                    <span className="text-foreground">
+                                        {(() => {
+                                            const item =
+                                                itemsCache.current.get(selectedValue) ||
+                                                items.find((i) => String(field.getOptionValue(i)) === selectedValue);
+                                            return item ? field.getOptionLabel(item) : selectedValue;
+                                        })()}
+                                    </span>
+                                ) : (
+                                    <span className="text-muted-foreground select-none">
+                                        {field.placeholder || 'Select an option...'}
+                                    </span>
+                                )}
+                            </span>
+                        )}
 
                         <div className="flex items-center gap-1 shrink-0 ms-1">
-                            {selectedValue && !field.disabled && !field.readonly && (
+                            {selectedStrings.length > 0 && !field.disabled && !field.readonly && (
                                 <span
                                     role="button"
                                     tabIndex={0}
@@ -176,7 +293,7 @@ export default function ApiSelect<T>({
                     align="start"
                     sideOffset={4}
                     className={cn(
-                        'w-[var(--radix-popover-trigger-width)] min-w-[8rem] p-1 shadow-md rounded-md border bg-popover text-popover-foreground z-50 overflow-hidden',
+                        'w-[var(--radix-popover-trigger-width)] min-w-[12rem] p-1 shadow-md rounded-md border bg-popover text-popover-foreground z-50 overflow-hidden',
                         contentClassName
                     )}
                 >
@@ -228,8 +345,8 @@ export default function ApiSelect<T>({
                             </div>
                         ) : (
                             items.map((item) => {
-                                const optValStr = field.getOptionValue(item);
-                                const isSelected = selectedValue === optValStr;
+                                const optValStr = String(field.getOptionValue(item));
+                                const isSelected = selectedStrings.includes(optValStr);
 
                                 return (
                                     <div
@@ -244,7 +361,7 @@ export default function ApiSelect<T>({
                                                 : 'hover:bg-accent/50 text-foreground'
                                         )}
                                     >
-                                        <span className="flex-1 truncate">{field.getOptionLabel(item)}</span>
+                                        <div className="flex-1 truncate">{field.getOptionLabel(item)}</div>
                                         {isSelected && (
                                             <Check className="size-3.5 shrink-0 text-accent-foreground ms-2" />
                                         )}

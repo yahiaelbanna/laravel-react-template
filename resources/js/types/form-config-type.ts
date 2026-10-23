@@ -51,6 +51,7 @@ export type ApiSelectConfig<T> = BaseFieldConfig & {
     getOptionLabel: (item: T) => string | React.ReactNode;
     getOptionValue: (item: T) => string;
     options: ApiOptionsType;
+    multiple?: boolean;
 };
 
 export type ApiOptionsType = {
