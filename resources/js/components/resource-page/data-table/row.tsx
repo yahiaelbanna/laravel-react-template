@@ -48,7 +48,7 @@ export default function DataTableRow({ config, item }: { config: Config, item: a
             </TableCell>
 
             {config.columns.map((column) => (
-                <DataTableCell key={column.key} column={column} value={item[column.key]} />
+                <DataTableCell key={column.key} column={column} value={column.value ? (typeof column.value === 'function' ? column.value(item) : column.value) : item[column.key]} />
             ))}
             <TableCell className="action-cell">
                 <DropdownMenu>

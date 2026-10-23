@@ -9,6 +9,14 @@ export const columns: Column[] = [
     {
         key: "name",
         title: "Name",
+        value: (row: any) => {
+            return (
+                <div className="w-fit">
+                    <span className="text-primary font-semibold">{row.name.toUpperCase()}</span>
+                    <p className="text-muted-foreground text-xs">{'@' + row.id}</p>
+                </div>
+            )
+        },
     },
     {
         key: "email",

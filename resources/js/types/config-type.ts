@@ -7,7 +7,7 @@ export type Column = {
     type?: columnType;
     options?: Record<string, BadgeVariant>;
     preventDrawer?: boolean;
-
+    value?: string | ((row: any) => React.ReactNode | string);
     // sortable?: boolean;
     // searchable?: boolean;
     // filterable?: boolean;
