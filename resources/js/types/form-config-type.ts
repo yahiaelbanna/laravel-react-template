@@ -9,6 +9,7 @@ export type FormSection = {
     fields: FieldConfig[];
 }
 
+
 export type BaseFieldConfig = {
     key: string;
     label?: string;
@@ -21,15 +22,40 @@ export type BaseFieldConfig = {
     hidden?: boolean;
     className?: string;
 
-    type: FiledType;
-
     rowSpan?: 1 | 2 | 3 | 4;
     colSpan?: 1 | 2 | 3 | 4;
 };
 
+export type StandardFieldType =
+    | "text"
+    | "email"
+    | "number"
+    | "date"
+    | "datetime"
+    | "currency"
+    | "textArea";
 
-export type FieldConfig = BaseFieldConfig;
+export type StandardFieldConfig = BaseFieldConfig & {
+    type: StandardFieldType;
+};
+
+export type SelectFieldType = "select" | "multi-select";
+
+export type SelectFieldConfig = BaseFieldConfig & {
+    type: SelectFieldType;
+    options: SelectOption[];
+};
+
+export type SelectOption = {
+    label: string;
+    value: string;
+    disabled?: boolean;
+};
+
+export type FieldConfig = StandardFieldConfig | SelectFieldConfig;
 
 export type ResourceForm = FormSection[];
 
-export type FiledType = "text" | "email" | "number" | "date" | "datetime" | "currency" | "textArea";
+export type FiledType = StandardFieldType | SelectFieldType;
+export type FieldType = FiledType;
+

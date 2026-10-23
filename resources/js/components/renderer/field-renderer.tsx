@@ -4,6 +4,8 @@ import { Input } from "../ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Info } from "lucide-react";
 import { Textarea } from "../ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import MultiSelect from "../ui/multi-select";
 
 export default function FieldRenderer({ field, labelClass }: { field: FieldConfig, labelClass?: string }) {
     const attributes = {
@@ -29,6 +31,23 @@ export default function FieldRenderer({ field, labelClass }: { field: FieldConfi
                             return <Input type="number" inputMode="numeric" {...attributes} />;
                         case "textArea":
                             return <Textarea {...attributes} />;
+                        case "select":
+                            return (
+                                <Select defaultValue={field.defaultValue?.toString()} {...attributes}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder={field.placeholder} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {field.options.map((option) => (
+                                            <SelectItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            );
+                        case "multi-select":
+                            return <MultiSelect options={field.options} defaultValue={field.defaultValue as any} {...attributes} />;
                         default:
                             return <Input type="text" {...attributes} />;
                     }
