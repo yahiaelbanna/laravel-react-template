@@ -6,6 +6,7 @@ import { Info } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import MultiSelect from "../ui/multi-select";
+import ApiSelect from "../ui/api-select";
 
 export default function FieldRenderer({ field, labelClass }: { field: FieldConfig, labelClass?: string }) {
     const attributes = {
@@ -48,6 +49,8 @@ export default function FieldRenderer({ field, labelClass }: { field: FieldConfi
                             );
                         case "multi-select":
                             return <MultiSelect options={field.options} defaultValue={field.defaultValue as any} {...attributes} />;
+                        case "apiSelect":
+                            return <ApiSelect field={field} />;
                         default:
                             return <Input type="text" {...attributes} />;
                     }

@@ -55,6 +55,40 @@ export const formSchema: ResourceForm = [
                     { label: "Viewer", value: "viewer" },
                 ]
             },
+            {
+                key: "apiSelect",
+                label: "API Select",
+                placeholder: "API Select",
+                type: "apiSelect",
+                options: {
+                    endpoint: "/api/data",
+                },
+                getOptionLabel: (item: any) => {
+                    return (
+                        <div className="flex items-center">
+                            <div className="flex size-6 rounded-md items-center justify-center bg-primary text-primary-foreground mr-3">
+                                {item.name[0]}
+                            </div>
+                            <div className="flex flex-col">
+                                <div className="font-medium">{item.name}</div>
+                                <div className="text-[10px] text-muted-foreground">{item.description}</div>
+                            </div>
+                        </div>
+                    )
+                },
+                getOptionValue: (item: any) => item.id,
+            },
+            {
+                key: "apiSelect2",
+                label: "API Select 2",
+                placeholder: "API Select 2",
+                type: "apiSelect",
+                options: {
+                    endpoint: "/api/data",
+                },
+                getOptionLabel: (item: any) => item.name,
+                getOptionValue: (item: any) => item.id,
+            }
         ],
     },
 ];

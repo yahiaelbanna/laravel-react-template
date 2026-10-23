@@ -46,16 +46,34 @@ export type SelectFieldConfig = BaseFieldConfig & {
     options: SelectOption[];
 };
 
+export type ApiSelectConfig<T> = BaseFieldConfig & {
+    type: "apiSelect";
+    getOptionLabel: (item: T) => string | React.ReactNode;
+    getOptionValue: (item: T) => string;
+    options: ApiOptionsType;
+};
+
+export type ApiOptionsType = {
+    endpoint: string;
+    page?: number;
+    pageSize?: number;
+    search?: string;
+    query?: Record<string, unknown>;
+    sort?: string;
+    orderBy?: "asc" | "desc";
+    signal?: AbortSignal;
+};
+
 export type SelectOption = {
     label: string;
     value: string;
     disabled?: boolean;
 };
 
-export type FieldConfig = StandardFieldConfig | SelectFieldConfig;
+export type FieldConfig = StandardFieldConfig | SelectFieldConfig | ApiSelectConfig<any>;
 
 export type ResourceForm = FormSection[];
 
-export type FiledType = StandardFieldType | SelectFieldType;
+export type FiledType = StandardFieldType | SelectFieldType | "apiSelect";
 export type FieldType = FiledType;
 
