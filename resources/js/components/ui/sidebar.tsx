@@ -409,6 +409,8 @@ const sidebarMenuButtonVariants = cva(
                 default: 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground',
                 outline:
                     'bg-background border border-sidebar-border/80 shadow-2xs hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                sub:
+                    'text-sidebar-foreground/80 hover:bg-sidebar-accent/40 hover:text-sidebar-foreground/90 ms-5 rounded-sm! h-7! py-4.5!',
             },
             size: {
                 default: 'h-11 text-sm font-light',
