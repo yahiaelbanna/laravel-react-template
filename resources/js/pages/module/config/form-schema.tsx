@@ -56,6 +56,13 @@ export const formSchema: ResourceForm = [
                 ]
             },
             {
+                key: "release_date",
+                label: "Release Date",
+                placeholder: "DD/MM/YYYY",
+                type: "date",
+                tooltip: "You can type digits directly (e.g. 15052026) or pick from the calendar",
+            },
+            {
                 key: "apiSelect",
                 label: "API Select",
                 placeholder: "API Select",

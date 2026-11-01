@@ -1,4 +1,3 @@
-
 export type FormSection = {
     key: string;
     title?: string;
@@ -8,7 +7,6 @@ export type FormSection = {
 
     fields: FieldConfig[];
 }
-
 
 export type BaseFieldConfig = {
     key: string;
@@ -52,6 +50,13 @@ export type InputGroupConfig = BaseFieldConfig & {
     addonAlign?: "start" | "end";
 };
 
+export type DateFieldConfig = BaseFieldConfig & {
+    type: "date";
+    format?: "DD/MM/YYYY" | "YYYY-MM-DD" | string;
+    minDate?: string | Date;
+    maxDate?: string | Date;
+};
+
 export type ApiSelectConfig<T> = BaseFieldConfig & {
     type: "apiSelect";
     getOptionLabel: (item: T) => string | React.ReactNode;
@@ -77,10 +82,14 @@ export type SelectOption = {
     disabled?: boolean;
 };
 
-export type FieldConfig = StandardFieldConfig | SelectFieldConfig | ApiSelectConfig<any> | InputGroupConfig;
+export type FieldConfig =
+    | StandardFieldConfig
+    | SelectFieldConfig
+    | ApiSelectConfig<any>
+    | InputGroupConfig
+    | DateFieldConfig;
 
 export type ResourceForm = FormSection[];
 
-export type FiledType = StandardFieldType | SelectFieldType | "apiSelect";
+export type FiledType = StandardFieldType | SelectFieldType | "apiSelect" | "inputGroup" | "date";
 export type FieldType = FiledType;
-

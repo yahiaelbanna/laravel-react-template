@@ -1,4 +1,4 @@
-import type { FieldConfig } from "@/types/form-config-type";
+import type { DateFieldConfig, FieldConfig } from "@/types/form-config-type";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import MultiSelect from "../ui/multi-select";
 import ApiSelect from "../ui/api-select";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
+import DatePicker from "../ui/date-picker";
 
 export default function FieldRenderer({ field, labelClass }: { field: FieldConfig, labelClass?: string }) {
     const attributes = {
@@ -33,6 +34,18 @@ export default function FieldRenderer({ field, labelClass }: { field: FieldConfi
                             return <Input type="number" inputMode="numeric" {...attributes} />;
                         case "textArea":
                             return <Textarea {...attributes} />;
+                        case "date": {
+                            const dateField = field as DateFieldConfig;
+                            return (
+                                <DatePicker
+                                    {...attributes}
+                                    defaultValue={field.defaultValue as string | Date}
+                                    format={dateField.format}
+                                    minDate={dateField.minDate}
+                                    maxDate={dateField.maxDate}
+                                />
+                            );
+                        }
                         case "select":
                             return (
                                 <Select defaultValue={field.defaultValue?.toString()} {...attributes}>
