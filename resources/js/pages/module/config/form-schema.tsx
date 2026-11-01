@@ -124,6 +124,13 @@ export const formSchema: ResourceForm = [
                 getOptionLabel: (item: any) => item.name,
                 getOptionValue: (item: any) => item.id,
                 multiple: true,
+            },
+            {
+                key: "inputgroup",
+                label: "Input Group",
+                type: "inputGroup",
+                addon: ("Egp"),
+                addonAlign: "start"
             }
         ],
     },

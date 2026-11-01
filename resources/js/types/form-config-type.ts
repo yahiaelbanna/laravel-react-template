@@ -46,6 +46,12 @@ export type SelectFieldConfig = BaseFieldConfig & {
     options: SelectOption[];
 };
 
+export type InputGroupConfig = BaseFieldConfig & {
+    type: "inputGroup";
+    addon: String | React.ReactNode;
+    addonAlign?: "start" | "end";
+};
+
 export type ApiSelectConfig<T> = BaseFieldConfig & {
     type: "apiSelect";
     getOptionLabel: (item: T) => string | React.ReactNode;
@@ -71,7 +77,7 @@ export type SelectOption = {
     disabled?: boolean;
 };
 
-export type FieldConfig = StandardFieldConfig | SelectFieldConfig | ApiSelectConfig<any>;
+export type FieldConfig = StandardFieldConfig | SelectFieldConfig | ApiSelectConfig<any> | InputGroupConfig;
 
 export type ResourceForm = FormSection[];
 

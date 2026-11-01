@@ -7,6 +7,7 @@ import { Textarea } from "../ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import MultiSelect from "../ui/multi-select";
 import ApiSelect from "../ui/api-select";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
 
 export default function FieldRenderer({ field, labelClass }: { field: FieldConfig, labelClass?: string }) {
     const attributes = {
@@ -51,6 +52,17 @@ export default function FieldRenderer({ field, labelClass }: { field: FieldConfi
                             return <MultiSelect options={field.options} defaultValue={field.defaultValue as any} {...attributes} />;
                         case "apiSelect":
                             return <ApiSelect field={field} />;
+                        case "inputGroup":
+                            return (
+                                <>
+                                    <InputGroup>
+                                        <InputGroupInput type="text" {...attributes} />
+                                        <InputGroupAddon align={field.addonAlign == "start" ? "inline-start" : "inline-end"}>
+                                            {field.addon}
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </>
+                            );
                         default:
                             return <Input type="text" {...attributes} />;
                     }
@@ -64,7 +76,7 @@ export default function FieldRenderer({ field, labelClass }: { field: FieldConfi
 function FieldContainer({ field, children, labelClass }: { field: FieldConfig, children: React.ReactNode, labelClass?: string }) {
     return (
         <div className="flex flex-col max-w-164">
-            <Label htmlFor={field.key} className={`py-1.5 font-light text-[13px] flex items-center ${labelClass}`}>{field.label}
+            <Label htmlFor={field.key} className={`py-1.5 font-light text-[12px] flex items-center ${labelClass}`}>{field.label}
 
                 {field.required ? <span className="text-red-400 ms-0.5">*</span> : null}
 
