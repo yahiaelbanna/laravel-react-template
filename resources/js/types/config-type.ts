@@ -78,6 +78,9 @@ export default interface Config {
     showable?: boolean;
     deletable?: boolean;
 
+    submitRoute?: string;
+    submitMethod?: "post" | "put" | "patch";
+
     viewTypes?: ViewTypes[];
 
     columns: Column[];
