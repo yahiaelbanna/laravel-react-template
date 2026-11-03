@@ -29,7 +29,7 @@ class ModuleController extends Controller
         // Example mock record for editing
         $module = [
             'id' => (int) $id,
-            'name' => 'Sample Module ' . $id,
+            'name' => 'Sample Module '.$id,
             'description' => 'This is a sample module description ready for editing.',
             'type' => 'web-module',
             'roles' => ['admin', 'editor'],
@@ -46,5 +46,15 @@ class ModuleController extends Controller
         // In real app, validate and update model:
         // $validated = $request->validate([...]);
         return redirect()->route('module.index');
+    }
+
+    public function clone($id)
+    {
+        return back()->with('success', 'Module cloned successfully');
+    }
+
+    public function destroy($id)
+    {
+        return back()->with('success', 'Module deleted successfully');
     }
 }

@@ -303,9 +303,9 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                     {activeDialog && (
                         <>
                             <DialogHeader>
-                                <DialogTitle>{activeDialog.options.title}</DialogTitle>
+                                <DialogTitle className="font-semibold">{activeDialog.options.title}</DialogTitle>
                                 {activeDialog.options.description && (
-                                    <DialogDescription>
+                                    <DialogDescription className="whitespace-pre-line font-light mt-2">
                                         {activeDialog.options.description}
                                     </DialogDescription>
                                 )}

@@ -9,4 +9,7 @@ Route::prefix('module')->name('module.')->group(function () {
     Route::post('/', [ModuleController::class, 'store'])->name('store');
     Route::get('/{id}/edit', [ModuleController::class, 'edit'])->name('edit');
     Route::put('/{id}', [ModuleController::class, 'update'])->name('update');
+
+    Route::get('/{id}/clone', [ModuleController::class, 'clone'])->name('clone');
+    Route::delete('/{id}', [ModuleController::class, 'destroy'])->name('destroy');
 });
