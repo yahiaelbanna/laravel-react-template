@@ -77,7 +77,7 @@ export default function FieldRenderer({
                             return (
                                 <Textarea
                                     {...attributes}
-                                    value={value !== undefined ? value : (field.defaultValue ?? "")}
+                                    defaultValue={value !== undefined ? value : (field.defaultValue ?? "")}
                                     onChange={(e) => onChange?.(e.target.value)}
                                     aria-invalid={!!error}
                                 />
