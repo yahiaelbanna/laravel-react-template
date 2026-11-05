@@ -1,4 +1,4 @@
-import type { DateFieldConfig, FieldConfig } from "@/types/form-config-type";
+import type { DateFieldConfig, FieldConfig, RepeaterFieldConfig } from "@/types/form-config-type";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
@@ -9,6 +9,7 @@ import MultiSelect from "../ui/multi-select";
 import ApiSelect from "../ui/api-select";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
 import DatePicker from "../ui/date-picker";
+import Repeater from "../ui/repeater";
 import InputError from "../input-error";
 
 export interface FieldRendererProps {
@@ -17,6 +18,7 @@ export interface FieldRendererProps {
     value?: any;
     onChange?: (value: any) => void;
     error?: string;
+    hideLabel?: boolean;
 }
 
 export default function FieldRenderer({
@@ -25,6 +27,7 @@ export default function FieldRenderer({
     value,
     onChange,
     error,
+    hideLabel = false,
 }: FieldRendererProps) {
     const attributes = {
         id: field.key,
@@ -37,7 +40,13 @@ export default function FieldRenderer({
     };
 
     return (
-        <FieldContainer field={field} labelClass={labelClass} error={error}>
+        <FieldContainer
+            field={field}
+            labelClass={labelClass}
+            error={error}
+            hideLabel={hideLabel}
+            isFullWidth={field.type === "repeater"}
+        >
             {
                 (() => {
                     switch (field.type) {
@@ -96,6 +105,20 @@ export default function FieldRenderer({
                                 />
                             );
                         }
+                        case "repeater": {
+                            const repeaterField = field as RepeaterFieldConfig;
+                            return (
+                                <Repeater
+                                    field={repeaterField}
+                                    value={value}
+                                    defaultValue={field.defaultValue}
+                                    onChange={onChange}
+                                    disabled={field.disabled}
+                                    readOnly={field.readonly}
+                                    className={field.className}
+                                />
+                            );
+                        }
                         case "select": {
                             const selectVal = value !== undefined
                                 ? (value === null ? "" : String(value))
@@ -136,7 +159,7 @@ export default function FieldRenderer({
                                 <ApiSelect
                                     field={field}
                                     value={value}
-                                    // defaultValue={field.defaultValue}
+                                    defaultValue={field.defaultValue}
                                     onChange={(val) => onChange?.(val)}
                                 />
                             );
@@ -177,30 +200,36 @@ function FieldContainer({
     children,
     labelClass,
     error,
+    hideLabel = false,
+    isFullWidth = false,
 }: {
     field: FieldConfig;
     children: React.ReactNode;
     labelClass?: string;
     error?: string;
+    hideLabel?: boolean;
+    isFullWidth?: boolean;
 }) {
     return (
-        <div className="flex flex-col max-w-164">
-            <Label htmlFor={field.key} className={`py-1.5 font-light text-[12px] flex items-center ${labelClass}`}>
-                {field.label}
+        <div className={`flex flex-col ${isFullWidth ? "w-full" : "w-full max-w-164"}`}>
+            {!hideLabel && field.label && (
+                <Label htmlFor={field.key} className={`py-1.5 font-light text-[12px] flex items-center ${labelClass}`}>
+                    {field.label}
 
-                {field.required ? <span className="text-red-400 ms-0.5">*</span> : null}
+                    {field.required ? <span className="text-red-400 ms-0.5">*</span> : null}
 
-                {field.tooltip ? (
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Info className="size-3 opacity-80 ms-1.5" />
-                        </TooltipTrigger>
-                        <TooltipContent side="top">
-                            <p className="text-xs">{field.tooltip}</p>
-                        </TooltipContent>
-                    </Tooltip>
-                ) : null}
-            </Label>
+                    {field.tooltip ? (
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Info className="size-3 opacity-80 ms-1.5" />
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                <p className="text-xs">{field.tooltip}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    ) : null}
+                </Label>
+            )}
 
             {children}
 

@@ -55,15 +55,27 @@ export default function FormResource({
         config.form?.forEach((section) => {
             section.fields?.forEach((field) => {
                 const isMulti = field.type === "multi-select" || (field.type === "apiSelect" && (field as any).multiple);
-                const fallback = isMulti ? [] : "";
-                values[field.key] = field.defaultValue ?? fallback;
+                const isRepeater = field.type === "repeater";
+                const fallback = isRepeater ? [] : (isMulti ? [] : "");
+                let initialVal = initialData?.[field.key] ?? field.defaultValue ?? fallback;
+
+                if (isRepeater && typeof initialVal === "string") {
+                    try {
+                        const parsed = JSON.parse(initialVal);
+                        if (Array.isArray(parsed)) initialVal = parsed;
+                    } catch {}
+                }
+
+                values[field.key] = initialVal;
             });
         });
 
         // Overlay initialData if provided (e.g. edit page)
         if (initialData) {
             Object.keys(initialData).forEach((key) => {
-                values[key] = initialData[key];
+                if (values[key] === undefined) {
+                    values[key] = initialData[key];
+                }
             });
         }
 

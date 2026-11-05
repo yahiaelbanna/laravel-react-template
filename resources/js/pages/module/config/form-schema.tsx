@@ -138,7 +138,80 @@ export const formSchema: ResourceForm = [
                 type: "inputGroup",
                 addon: ("Egp"),
                 addonAlign: "start"
-            }
+            },
+            {
+                key: "features",
+                label: "Module Features (Table Repeater)",
+                type: "repeater",
+                layout: "table",
+                colSpan: 2,
+                tooltip: "Add dynamic features for this module",
+                addButtonText: "Add Feature",
+                emptyText: "No features added yet. Click 'Add Feature' to start.",
+                fields: [
+                    {
+                        key: "feature_name",
+                        label: "Feature Name",
+                        placeholder: "e.g. Dark Mode",
+                        type: "text",
+                        required: true,
+                    },
+                    {
+                        key: "status",
+                        label: "Status",
+                        type: "select",
+                        options: [
+                            { label: "Active", value: "active" },
+                            { label: "Beta", value: "beta" },
+                            { label: "Deprecated", value: "deprecated" },
+                        ],
+                        defaultValue: "active",
+                    },
+                    {
+                        key: "release_date",
+                        label: "Release Date",
+                        type: "date",
+                        placeholder: "DD/MM/YYYY",
+                    },
+                ],
+            },
+            {
+                key: "team_members",
+                label: "Team Members (Card Repeater)",
+                type: "repeater",
+                layout: "card",
+                colSpan: 2,
+                columns: 2,
+                itemTitle: "Member",
+                addButtonText: "Add Member",
+                emptyText: "No team members assigned.",
+                fields: [
+                    {
+                        key: "name",
+                        label: "Member Name",
+                        placeholder: "e.g. John Doe",
+                        type: "text",
+                        required: true,
+                    },
+                    {
+                        key: "email",
+                        label: "Email",
+                        placeholder: "john@example.com",
+                        type: "email",
+                    },
+                    {
+                        key: "role",
+                        label: "Role",
+                        type: "select",
+                        options: [
+                            { label: "Developer", value: "developer" },
+                            { label: "Designer", value: "designer" },
+                            { label: "Manager", value: "manager" },
+                        ],
+                        defaultValue: "developer",
+                    },
+                ],
+            },
         ],
     },
 ];

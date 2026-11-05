@@ -26,7 +26,7 @@ class ModuleController extends Controller
 
     public function edit($id)
     {
-        // Example mock record for editing
+        // Example mock record for editing with repeater data
         $module = [
             'id' => (int) $id,
             'name' => 'Sample Module '.$id,
@@ -34,6 +34,14 @@ class ModuleController extends Controller
             'type' => 'web-module',
             'roles' => ['admin', 'editor'],
             'release_date' => '2026-11-02',
+            'features' => [
+                ['feature_name' => 'Dark Mode Support', 'status' => 'active', 'release_date' => '2026-05-10'],
+                ['feature_name' => 'Kanban Drag & Drop', 'status' => 'beta', 'release_date' => '2026-06-15'],
+            ],
+            'team_members' => [
+                ['name' => 'Ahmed Ali', 'email' => 'ahmed@example.com', 'role' => 'developer'],
+                ['name' => 'Sara Omar', 'email' => 'sara@example.com', 'role' => 'designer'],
+            ],
         ];
 
         return Inertia::render('module/edit', [
@@ -46,15 +54,5 @@ class ModuleController extends Controller
         // In real app, validate and update model:
         // $validated = $request->validate([...]);
         return redirect()->route('module.index');
-    }
-
-    public function clone($id)
-    {
-        return back()->with('success', 'Module cloned successfully');
-    }
-
-    public function destroy($id)
-    {
-        return back()->with('success', 'Module deleted successfully');
     }
 }

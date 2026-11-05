@@ -12,7 +12,7 @@ export type BaseFieldConfig = {
     key: string;
     label?: string;
     placeholder?: string;
-    defaultValue?: string | number | boolean | Date;
+    defaultValue?: any;
     required?: boolean;
     disabled?: boolean;
     readonly?: boolean;
@@ -57,6 +57,20 @@ export type DateFieldConfig = BaseFieldConfig & {
     maxDate?: string | Date;
 };
 
+export type RepeaterLayout = "table" | "card";
+
+export type RepeaterFieldConfig = BaseFieldConfig & {
+    type: "repeater";
+    fields: FieldConfig[];
+    layout?: RepeaterLayout;
+    columns?: 1 | 2 | 3 | 4;
+    addButtonText?: string;
+    emptyText?: string;
+    minItems?: number;
+    maxItems?: number;
+    itemTitle?: string | ((index: number, item: Record<string, any>) => string);
+};
+
 export type ApiSelectConfig<T> = BaseFieldConfig & {
     type: "apiSelect";
     getOptionLabel: (item: T) => string | React.ReactNode;
@@ -87,9 +101,10 @@ export type FieldConfig =
     | SelectFieldConfig
     | ApiSelectConfig<any>
     | InputGroupConfig
-    | DateFieldConfig;
+    | DateFieldConfig
+    | RepeaterFieldConfig;
 
 export type ResourceForm = FormSection[];
 
-export type FiledType = StandardFieldType | SelectFieldType | "apiSelect" | "inputGroup" | "date";
+export type FiledType = StandardFieldType | SelectFieldType | "apiSelect" | "inputGroup" | "date" | "repeater";
 export type FieldType = FiledType;
