@@ -84,9 +84,11 @@ export default function FormResource({
 
     const { data, setData, post, put, patch, processing, errors } = useForm<Record<string, any>>(computeInitialData());
 
-    // Sync form state if initialData changes externally
+    // Sync form state if initialData changes externally (e.g. loaded asynchronously)
+    const initialDataRef = React.useRef(initialData);
     React.useEffect(() => {
-        if (initialData) {
+        if (initialData && initialData !== initialDataRef.current) {
+            initialDataRef.current = initialData;
             setData((prev: any) => ({ ...prev, ...initialData }));
         }
     }, [initialData]);

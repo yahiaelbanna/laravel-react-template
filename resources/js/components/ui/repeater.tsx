@@ -15,43 +15,29 @@ export interface RepeaterProps {
     className?: string;
 }
 
-type InternalItem = Record<string, any> & { _rowId: string };
-
 function generateRowId(): string {
     return Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
 }
 
-function parseRepeaterValue(val: unknown): InternalItem[] {
+function parseRawArray(val: unknown): Record<string, any>[] {
     if (!val) return [];
-    let parsedArray: any[] = [];
-
     if (Array.isArray(val)) {
-        parsedArray = val;
-    } else if (typeof val === 'string') {
+        return val.map((item) => (typeof item === 'object' && item !== null ? item : { value: item }));
+    }
+    if (typeof val === 'string') {
         const trimmed = val.trim();
         if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
             try {
                 const json = JSON.parse(trimmed);
                 if (Array.isArray(json)) {
-                    parsedArray = json;
+                    return parseRawArray(json);
                 }
             } catch {
-                parsedArray = [];
+                return [];
             }
         }
     }
-
-    return parsedArray.map((item) => {
-        const base = typeof item === 'object' && item !== null ? item : { value: item };
-        return {
-            ...base,
-            _rowId: base._rowId || generateRowId(),
-        };
-    });
-}
-
-function cleanItems(items: InternalItem[]): Record<string, any>[] {
-    return items.map(({ _rowId, ...rest }) => rest);
+    return [];
 }
 
 export function Repeater({
@@ -65,35 +51,45 @@ export function Repeater({
 }: RepeaterProps) {
     const isControlled = value !== undefined;
 
-    const [internalItems, setInternalItems] = React.useState<InternalItem[]>(() => {
-        return parseRepeaterValue(value !== undefined ? value : (defaultValue ?? field.defaultValue));
+    const [internalItems, setInternalItems] = React.useState<Record<string, any>[]>(() => {
+        return parseRawArray(value !== undefined ? value : (defaultValue ?? field.defaultValue));
     });
 
-    // Synchronize when controlled value changes externally
+    // Synchronize internal state when controlled value changes externally
     React.useEffect(() => {
         if (isControlled) {
-            setInternalItems(parseRepeaterValue(value));
+            setInternalItems(parseRawArray(value));
         }
     }, [value, isControlled]);
 
-    const items = isControlled ? parseRepeaterValue(value) : internalItems;
+    const items = isControlled ? parseRawArray(value) : internalItems;
 
-    const emitChange = (newItems: InternalItem[]) => {
+    // Stable row IDs ref that persist across re-renders
+    const rowIdsRef = React.useRef<string[]>([]);
+
+    // Ensure we have stable persistent IDs for each row
+    while (rowIdsRef.current.length < items.length) {
+        rowIdsRef.current.push(generateRowId());
+    }
+    if (rowIdsRef.current.length > items.length) {
+        rowIdsRef.current.length = items.length;
+    }
+
+    const emitChange = (newItems: Record<string, any>[]) => {
         if (!isControlled) {
             setInternalItems(newItems);
         }
-        onChange?.(cleanItems(newItems));
+        onChange?.(newItems);
     };
 
     const handleAddRow = () => {
         if (disabled || readOnly) return;
         if (field.maxItems && items.length >= field.maxItems) return;
 
-        const newItem: InternalItem = {
-            _rowId: generateRowId(),
-        };
+        // Add a new persistent ID for the new row
+        rowIdsRef.current.push(generateRowId());
 
-        // Initialize child field default values
+        const newItem: Record<string, any> = {};
         field.fields?.forEach((f) => {
             const isMulti = f.type === 'multi-select' || (f.type === 'apiSelect' && (f as any).multiple);
             const isChildRepeater = f.type === 'repeater';
@@ -107,6 +103,9 @@ export function Repeater({
     const handleDeleteRow = (index: number) => {
         if (disabled || readOnly) return;
         if (field.minItems && items.length <= field.minItems) return;
+
+        // Splice the specific ID so that other rows retain their exact IDs and DOM focus
+        rowIdsRef.current.splice(index, 1);
 
         const newItems = items.filter((_, i) => i !== index);
         emitChange(newItems);
@@ -132,9 +131,9 @@ export function Repeater({
     const canAdd = !disabled && !readOnly && (!field.maxItems || items.length < field.maxItems);
     const canDelete = !disabled && !readOnly && (!field.minItems || items.length > field.minItems);
 
-    const resolveItemTitle = (index: number, row: InternalItem): string => {
+    const resolveItemTitle = (index: number, row: Record<string, any>): string => {
         if (typeof field.itemTitle === 'function') {
-            return field.itemTitle(index, cleanItems([row])[0]);
+            return field.itemTitle(index, row);
         }
         if (typeof field.itemTitle === 'string') {
             return `${field.itemTitle} #${index + 1}`;
@@ -190,9 +189,9 @@ export function Repeater({
                                                 <Button
                                                     type="button"
                                                     variant="outline"
-                                                    size="xs"
+                                                    size="sm"
                                                     onClick={handleAddRow}
-                                                    className="gap-1 cursor-pointer"
+                                                    className="gap-1 mt-2 cursor-pointer"
                                                 >
                                                     <Plus className="size-3.5" />
                                                     {field.addButtonText || 'Add Row'}
@@ -202,42 +201,47 @@ export function Repeater({
                                     </td>
                                 </tr>
                             ) : (
-                                items.map((row, rowIndex) => (
-                                    <tr key={row._rowId} className="hover:bg-muted/15 transition-colors">
-                                        <td className="px-3 py-2 text-center text-muted-foreground font-mono text-[11px] align-middle select-none">
-                                            {rowIndex + 1}
-                                        </td>
+                                items.map((row, rowIndex) => {
+                                    const rowId = rowIdsRef.current[rowIndex] || `row-${rowIndex}`;
 
-                                        {field.fields?.map((childField) => (
-                                            <td key={childField.key} className="px-2 py-1.5 align-middle">
-                                                <FieldRenderer
-                                                    field={{
-                                                        ...childField,
-                                                        key: `${field.key}_${rowIndex}_${childField.key}`,
-                                                    }}
-                                                    hideLabel={true}
-                                                    value={row[childField.key]}
-                                                    onChange={(val) => handleFieldChange(rowIndex, childField.key, val)}
-                                                />
+                                    return (
+                                        <tr key={rowId} className="hover:bg-muted/15 transition-colors">
+                                            <td className="px-3 py-2 text-center text-muted-foreground font-mono text-[11px] align-middle select-none">
+                                                {rowIndex + 1}
                                             </td>
-                                        ))}
 
-                                        <td className="px-2 py-1.5 text-center align-middle">
-                                            {canDelete && (
-                                                <Button
-                                                    type="button"
-                                                    variant="ghost"
-                                                    size="icon-xs"
-                                                    onClick={() => handleDeleteRow(rowIndex)}
-                                                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
-                                                    title="Delete row"
-                                                >
-                                                    <Trash2 className="size-3.5" />
-                                                </Button>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))
+                                            {field.fields?.map((childField) => (
+                                                <td key={childField.key} className="px-2 py-1.5 align-middle">
+                                                    <FieldRenderer
+                                                        key={`${field.key}_${rowId}_${childField.key}`}
+                                                        field={{
+                                                            ...childField,
+                                                            key: `${field.key}_${rowId}_${childField.key}`,
+                                                        }}
+                                                        hideLabel={true}
+                                                        value={row[childField.key]}
+                                                        onChange={(val) => handleFieldChange(rowIndex, childField.key, val)}
+                                                    />
+                                                </td>
+                                            ))}
+
+                                            <td className="px-2 py-1.5 text-center align-middle">
+                                                {canDelete && (
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => handleDeleteRow(rowIndex)}
+                                                        className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                                                        title="Delete row"
+                                                    >
+                                                        <Trash2 className="size-3.5" />
+                                                    </Button>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    );
+                                })
                             )}
                         </tbody>
                     </table>
@@ -249,7 +253,7 @@ export function Repeater({
                             <Button
                                 type="button"
                                 variant="outline"
-                                size="xs"
+                                size="sm"
                                 onClick={handleAddRow}
                                 className="gap-1.5 text-xs cursor-pointer"
                             >
@@ -280,7 +284,7 @@ export function Repeater({
                             <Button
                                 type="button"
                                 variant="outline"
-                                size="xs"
+                                size="sm"
                                 onClick={handleAddRow}
                                 className="gap-1 cursor-pointer"
                             >
@@ -292,57 +296,62 @@ export function Repeater({
                 </div>
             ) : (
                 <div className="space-y-3">
-                    {items.map((row, rowIndex) => (
-                        <div
-                            key={row._rowId}
-                            className="rounded-lg border border-border bg-card shadow-xs overflow-hidden transition-all"
-                        >
-                            {/* Card Header */}
-                            <div className="flex items-center justify-between px-3.5 py-2 bg-muted/40 border-b border-border text-xs font-medium">
-                                <div className="flex items-center gap-2">
-                                    <span className="size-5 rounded-full bg-primary-color/10 text-primary-color flex items-center justify-center text-[10px] font-semibold select-none">
-                                        {rowIndex + 1}
-                                    </span>
-                                    <span className="font-medium text-foreground">
-                                        {resolveItemTitle(rowIndex, row)}
-                                    </span>
+                    {items.map((row, rowIndex) => {
+                        const rowId = rowIdsRef.current[rowIndex] || `row-${rowIndex}`;
+
+                        return (
+                            <div
+                                key={rowId}
+                                className="rounded-lg border border-border bg-card shadow-xs overflow-hidden transition-all"
+                            >
+                                {/* Card Header */}
+                                <div className="flex items-center justify-between px-3.5 py-2 bg-muted/40 border-b border-border text-xs font-medium">
+                                    <div className="flex items-center gap-2">
+                                        <span className="size-5 rounded-full bg-primary-color/10 text-primary-color flex items-center justify-center text-[10px] font-semibold select-none">
+                                            {rowIndex + 1}
+                                        </span>
+                                        <span className="font-medium text-foreground">
+                                            {resolveItemTitle(rowIndex, row)}
+                                        </span>
+                                    </div>
+
+                                    {canDelete && (
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => handleDeleteRow(rowIndex)}
+                                            className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                                            title="Delete item"
+                                        >
+                                            <Trash2 className="size-3.5" />
+                                        </Button>
+                                    )}
                                 </div>
 
-                                {canDelete && (
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="icon-xs"
-                                        onClick={() => handleDeleteRow(rowIndex)}
-                                        className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
-                                        title="Delete item"
-                                    >
-                                        <Trash2 className="size-3.5" />
-                                    </Button>
-                                )}
+                                {/* Card Body */}
+                                <div className={cn('p-3.5 grid grid-cols-1 gap-3', gridCols[field.columns ?? 2])}>
+                                    {field.fields?.map((childField) => (
+                                        <div
+                                            key={childField.key}
+                                            className={gridColSpan[childField.colSpan ?? 1]}
+                                        >
+                                            <FieldRenderer
+                                                key={`${field.key}_${rowId}_${childField.key}`}
+                                                field={{
+                                                    ...childField,
+                                                    key: `${field.key}_${rowId}_${childField.key}`,
+                                                }}
+                                                hideLabel={false}
+                                                value={row[childField.key]}
+                                                onChange={(val) => handleFieldChange(rowIndex, childField.key, val)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-
-                            {/* Card Body */}
-                            <div className={cn('p-3.5 grid grid-cols-1 gap-3', gridCols[field.columns ?? 2])}>
-                                {field.fields?.map((childField) => (
-                                    <div
-                                        key={childField.key}
-                                        className={gridColSpan[childField.colSpan ?? 1]}
-                                    >
-                                        <FieldRenderer
-                                            field={{
-                                                ...childField,
-                                                key: `${field.key}_${rowIndex}_${childField.key}`,
-                                            }}
-                                            hideLabel={false}
-                                            value={row[childField.key]}
-                                            onChange={(val) => handleFieldChange(rowIndex, childField.key, val)}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
 
@@ -351,9 +360,9 @@ export function Repeater({
                     <Button
                         type="button"
                         variant="outline"
-                        size="xs"
+                        size="sm"
                         onClick={handleAddRow}
-                        className="gap-1.5 text-xs cursor-pointer"
+                        className="gap-1.5 mt-2 text-xs cursor-pointer"
                     >
                         <Plus className="size-3.5" />
                         {field.addButtonText || 'Add Item'}
@@ -365,4 +374,3 @@ export function Repeater({
 }
 
 export default Repeater;
-
