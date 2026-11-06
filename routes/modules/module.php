@@ -11,5 +11,6 @@ Route::prefix('module')->name('module.')->group(function () {
     Route::put('/{id}', [ModuleController::class, 'update'])->name('update');
 
     Route::get('/{id}/clone', [ModuleController::class, 'clone'])->name('clone');
+    Route::delete('/bulk-destroy', [ModuleController::class, 'bulkDestroy'])->name('destroy.bulk');
     Route::delete('/{id}', [ModuleController::class, 'destroy'])->name('destroy');
 });

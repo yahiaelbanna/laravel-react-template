@@ -55,4 +55,19 @@ class ModuleController extends Controller
         // $validated = $request->validate([...]);
         return redirect()->route('module.index');
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            // 'ids.*' => 'required|exists:modules,id',
+        ]);
+
+        // foreach ($request->ids as $id) {
+        //     // Module::destroy($id);
+
+        // }
+
+        return back()->with('success', 'Modules deleted successfully');
+    }
 }

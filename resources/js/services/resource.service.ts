@@ -57,7 +57,7 @@ export class ResourceService {
     }
 
     store(data: any) {
-        router.get(
+        router.post(
             route(`${this.props.resource}.store`),
             data,
             this.getProcessOptions()
@@ -65,7 +65,7 @@ export class ResourceService {
     }
 
     update(id: number | string, data: any) {
-        router.get(
+        router.post(
             route(`${this.props.resource}.update`, id),
             data,
             this.getProcessOptions()
@@ -73,9 +73,7 @@ export class ResourceService {
     }
 
     clone(id: number | string) {
-        console.log('aa');
-
-        router.get(
+        router.post(
             route(`${this.props.resource}.clone`, id),
             {},
             this.getProcessOptions("Data cloned successfully")
@@ -89,4 +87,16 @@ export class ResourceService {
         );
     }
 
+    bulkDestroy(ids: number[] | string[] | Set<number> | Set<string>, options?: Record<string, any>) {
+        const idsArray = ids instanceof Set ? Array.from(ids as Set<number | string>) : ids;
+
+        router.delete(
+            route(`${this.props.resource}.destroy.bulk`),
+            {
+                ...this.getProcessOptions('Selected data deleted successfully'),
+                ...options,
+                data: { ids: idsArray, ...(options?.data || {}) }
+            }
+        )
+    }
 }

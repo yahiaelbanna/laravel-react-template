@@ -34,5 +34,6 @@ export function useResource({
         update: service.update.bind(service),
         clone: service.clone.bind(service),
         destroy: service.destroy.bind(service),
+        bulkDestroy: service.bulkDestroy.bind(service),
     }
 }
