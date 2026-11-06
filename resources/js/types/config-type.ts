@@ -106,6 +106,6 @@ type columnType =
 
 
 export type BadgeVariant =
-    "default" | "secondary" | "destructive" | "outline";
+    "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "info" | "dark" | "ghost" | "link" | "purple" | "orange";
 
 export type ViewTypes = 'table' | 'kanban';
