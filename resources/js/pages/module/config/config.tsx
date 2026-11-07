@@ -13,14 +13,6 @@ const config: Config = {
 
     createLabel: "Create Module",
 
-    // editLabel: "Edit Module",
-    // showLabel: "Show Module",
-    // deleteLabel: "Delete Module",
-    // deleteConfirmTitle: "Delete Module",
-    // deleteConfirmMessage: "Are you sure you want to delete this module?",
-    // deleteSuccessMessage: "Module deleted successfully",
-    // deleteErrorMessage: "Failed to delete module",
-
     createable: true,
     duplicateable: true,
     editable: true,

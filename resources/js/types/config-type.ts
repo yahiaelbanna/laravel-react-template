@@ -67,11 +67,6 @@ export default interface Config {
     showLabel?: string;
     deleteLabel?: string;
 
-    deleteConfirmTitle?: string;
-    deleteConfirmMessage?: string;
-    deleteSuccessMessage?: string;
-    deleteErrorMessage?: string;
-
     createable?: boolean;
     editable?: boolean;
     duplicateable?: boolean;
@@ -90,6 +85,7 @@ export default interface Config {
     bulkActions?: BulkAction[];
 
     rowDrawer?: RowDrawerConfig;
+    onRowClick?: (row: any) => void;
 
     form?: ResourceForm;
 }

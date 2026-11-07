@@ -30,7 +30,8 @@ export default function DataTableRow({ config, item }: { config: Config, item: a
     const { open } = useDrawerSync();
 
     const handleRowClick = (e: React.MouseEvent) => {
-        if (!config.rowDrawer) return;
+        if (!config.rowDrawer && !config.onRowClick) return;
+
 
         if (e.detail > 1) return;
 
@@ -40,8 +41,12 @@ export default function DataTableRow({ config, item }: { config: Config, item: a
         const target = e.target as HTMLElement;
         if (target.closest('[data-prevent-click="true"], button, a, input, [role="checkbox"], [role="menu"],[role="button"]') || target.closest('.action-cell')) return;
 
-
-        open(item);
+        if (config.rowDrawer) {
+            open(item);
+        }
+        if (config.onRowClick) {
+            config.onRowClick(item);
+        }
     }
 
     const handleRowDelete = async () => {
