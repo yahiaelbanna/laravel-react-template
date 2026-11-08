@@ -67,7 +67,8 @@ export default function DataTableRow({ config, item }: { config: Config, item: a
     return (
         <TableRow onClick={handleRowClick} className={cn(
             "group transition-all duration-300",
-            resource.processing && "opacity-50 blur-[1px] pointer-events-none"
+            resource.processing && "opacity-50 blur-[1px] pointer-events-no,ne",
+            config.onRowClick || config.rowDrawer ? "cursor-pointer" : ""
         )}>
 
             <TableCell className="w-16">
