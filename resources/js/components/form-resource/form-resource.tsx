@@ -1,24 +1,18 @@
 import * as React from "react";
 import AppLayout from "@/layouts/app-layout";
-import { BreadcrumbItem } from "@/types";
-import Config from "@/types/config-type";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { Button } from "../ui/button";
 import FieldRenderer from "../renderer/field-renderer";
 import { Loader2 } from "lucide-react";
+import {
+    useResourceForm,
+    UseResourceFormOptions,
+    UseResourceFormReturn,
+} from "./use-resource-form";
 
-export interface FormResourceProps {
-    config: Config;
-    initialData?: Record<string, any>;
-    isEdit?: boolean;
-    submitRoute?: string;
-    submitUrl?: string;
-    submitMethod?: "post" | "put" | "patch";
-    submitParams?: any;
-    onSuccess?: (page?: any) => void;
-    onError?: (errors: any) => void;
-    cancelHref?: string;
+export interface FormResourceProps extends UseResourceFormOptions {
     className?: string;
+    children?: (ctx: UseResourceFormReturn) => React.ReactNode;
 }
 
 export default function FormResource({
@@ -33,136 +27,42 @@ export default function FormResource({
     onError,
     cancelHref,
     className,
+    children,
 }: FormResourceProps) {
-    // Determine whether this is edit mode or create mode
-    const isEditMode = isEdit !== undefined
-        ? isEdit
-        : Boolean(initialData && (initialData.id !== undefined || Object.keys(initialData).length > 0));
+    const formCtx = useResourceForm({
+        config,
+        initialData,
+        isEdit,
+        submitRoute,
+        submitUrl,
+        submitMethod,
+        submitParams,
+        onSuccess,
+        onError,
+        cancelHref,
+    });
 
-    const pageTitle = isEditMode
-        ? (config.editLabel || `Edit ${config.title}`)
-        : (config.createLabel || `Create ${config.title}`);
+    const {
+        data,
+        setData,
+        processing,
+        errors,
+        isEditMode,
+        pageTitle,
+        headerTitle,
+        breadcrumbs,
+        defaultCancelUrl,
+        handleSubmit,
+    } = formCtx;
 
-    const headerTitle = isEditMode
-        ? (config.editLabel || `Edit ${config.title}`)
-        : (config.createLabel || `Add New ${config.title}`);
-
-    // Compute initial form data from config schema and initialData
-    const computeInitialData = React.useCallback(() => {
-        const values: Record<string, any> = {};
-
-        // Extract default values from form schema
-        config.form?.forEach((section) => {
-            section.fields?.forEach((field) => {
-                const isMulti = field.type === "multi-select" || (field.type === "apiSelect" && (field as any).multiple);
-                const isRepeater = field.type === "repeater";
-                const fallback = isRepeater ? [] : (isMulti ? [] : "");
-                let initialVal = initialData?.[field.key] ?? field.defaultValue ?? fallback;
-
-                if (isRepeater && typeof initialVal === "string") {
-                    try {
-                        const parsed = JSON.parse(initialVal);
-                        if (Array.isArray(parsed)) initialVal = parsed;
-                    } catch {}
-                }
-
-                values[field.key] = initialVal;
-            });
-        });
-
-        // Overlay initialData if provided (e.g. edit page)
-        if (initialData) {
-            Object.keys(initialData).forEach((key) => {
-                if (values[key] === undefined) {
-                    values[key] = initialData[key];
-                }
-            });
-        }
-
-        return values;
-    }, [config.form, initialData]);
-
-    const { data, setData, post, put, patch, processing, errors } = useForm<Record<string, any>>(computeInitialData());
-
-    // Sync form state if initialData changes externally (e.g. loaded asynchronously)
-    const initialDataRef = React.useRef(initialData);
-    React.useEffect(() => {
-        if (initialData && initialData !== initialDataRef.current) {
-            initialDataRef.current = initialData;
-            setData((prev: any) => ({ ...prev, ...initialData }));
-        }
-    }, [initialData]);
-
-    const breadcrumbs: BreadcrumbItem[] = [
-        {
-            title: "Dashboard",
-            href: "/dashboard",
-        },
-        {
-            title: String(config.pluralTitle),
-            href: typeof route === "function" && route().has(`${config.modelName}.index`)
-                ? route(`${config.modelName}.index`)
-                : `/${config.modelName}`,
-        },
-        {
-            title: String(pageTitle),
-            href: isEditMode && (initialData?.id ?? data?.id)
-                ? (typeof route === "function" && route().has(`${config.modelName}.edit`)
-                    ? route(`${config.modelName}.edit`, initialData?.id ?? data?.id)
-                    : "#")
-                : (typeof route === "function" && route().has(`${config.modelName}.create`)
-                    ? route(`${config.modelName}.create`)
-                    : "#"),
-        },
-    ];
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        const recordId = initialData?.id ?? data?.id;
-        let targetUrl: string;
-
-        const customRoute = submitRoute ?? submitUrl ?? config.submitRoute;
-
-        if (customRoute) {
-            if (customRoute.startsWith("/") || customRoute.startsWith("http")) {
-                targetUrl = customRoute;
-            } else if (typeof route === "function") {
-                targetUrl = route(customRoute, submitParams ?? (isEditMode ? recordId : undefined));
-            } else {
-                targetUrl = customRoute;
-            }
-        } else {
-            const defaultRouteName = isEditMode
-                ? `${config.modelName}.update`
-                : `${config.modelName}.store`;
-
-            if (typeof route === "function") {
-                targetUrl = route(defaultRouteName, submitParams ?? (isEditMode ? recordId : undefined));
-            } else {
-                targetUrl = isEditMode ? `/${config.modelName}/${recordId}` : `/${config.modelName}`;
-            }
-        }
-
-        const method = submitMethod ?? config.submitMethod ?? (isEditMode ? "put" : "post");
-
-        const options = {
-            onSuccess: (page: any) => {
-                onSuccess?.(page);
-            },
-            onError: (errs: any) => {
-                onError?.(errs);
-            },
-        };
-
-        if (method === "put") {
-            put(targetUrl, options);
-        } else if (method === "patch") {
-            patch(targetUrl, options);
-        } else {
-            post(targetUrl, options);
-        }
-    };
+    if (children) {
+        return (
+            <AppLayout breadcrumbs={breadcrumbs}>
+                <Head title={pageTitle} />
+                {children(formCtx)}
+            </AppLayout>
+        );
+    }
 
     const sections = config.form;
 
@@ -189,14 +89,10 @@ export default function FormResource({
         4: "col-span-4",
     };
 
-    const defaultCancelUrl = typeof route === "function" && route().has(`${config.modelName}.index`)
-        ? route(`${config.modelName}.index`)
-        : "/dashboard";
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={String(pageTitle)} />
-            <form onSubmit={handleSubmit} className={`flex flex-col justify-between h-full ${className ?? ""}`}>
+            <Head title={pageTitle} />
+            <form onSubmit={handleSubmit} className={`flex flex-col justify-between h-full min-h-0 ${className ?? ""}`}>
                 <div className="shrink-0 border-b p-3 flex items-center justify-between bg-accent/30">
                     <h2 className="font-medium">{headerTitle}</h2>
                 </div>
@@ -241,7 +137,7 @@ export default function FormResource({
                     </Button>
 
                     <Button type="button" variant="outline" asChild>
-                        <Link href={cancelHref ?? defaultCancelUrl}>
+                        <Link href={defaultCancelUrl}>
                             Cancel
                         </Link>
                     </Button>

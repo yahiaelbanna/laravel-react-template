@@ -1,4 +1,4 @@
-import type { DateFieldConfig, FieldConfig, RepeaterFieldConfig } from "@/types/form-config-type";
+import type { DateFieldConfig, FieldConfig, MediaFieldConfig, RepeaterFieldConfig } from "@/types/form-config-type";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
@@ -10,6 +10,7 @@ import ApiSelect from "../ui/api-select";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
 import DatePicker from "../ui/date-picker";
 import Repeater from "../ui/repeater";
+import { MediaUploader } from "../media-uploader";
 import InputError from "../input-error";
 
 export interface FieldRendererProps {
@@ -45,7 +46,7 @@ export default function FieldRenderer({
             labelClass={labelClass}
             error={error}
             hideLabel={hideLabel}
-            isFullWidth={field.type === "repeater"}
+            isFullWidth={field.type === "repeater" || field.type === "media"}
         >
             {
                 (() => {
@@ -116,6 +117,56 @@ export default function FieldRenderer({
                                     disabled={field.disabled}
                                     readOnly={field.readonly}
                                     className={field.className}
+                                />
+                            );
+                        }
+                        case "media": {
+                            const mediaField = field as MediaFieldConfig;
+                            if (mediaField.multiple) {
+                                return (
+                                    <MediaUploader
+                                        id={field.key}
+                                        multiple
+                                        maxFiles={mediaField.maxFiles}
+                                        accept={mediaField.accept}
+                                        maxSize={mediaField.maxSize}
+                                        preventDuplicates={mediaField.preventDuplicates}
+                                        crop={mediaField.crop}
+                                        video={mediaField.video}
+                                        uploadHandler={mediaField.uploadHandler}
+                                        autoUpload={mediaField.autoUpload}
+                                        uploadConcurrency={mediaField.uploadConcurrency}
+                                        labels={mediaField.labels}
+                                        value={value}
+                                        defaultValue={field.defaultValue}
+                                        onChange={(items) => onChange?.(items)}
+                                        disabled={field.disabled}
+                                        readOnly={field.readonly}
+                                        className={field.className}
+                                        aria-invalid={!!error}
+                                    />
+                                );
+                            }
+                            return (
+                                <MediaUploader
+                                    id={field.key}
+                                    multiple={false}
+                                    accept={mediaField.accept}
+                                    maxSize={mediaField.maxSize}
+                                    preventDuplicates={mediaField.preventDuplicates}
+                                    crop={mediaField.crop}
+                                    video={mediaField.video}
+                                    uploadHandler={mediaField.uploadHandler}
+                                    autoUpload={mediaField.autoUpload}
+                                    uploadConcurrency={mediaField.uploadConcurrency}
+                                    labels={mediaField.labels}
+                                    value={value}
+                                    defaultValue={field.defaultValue}
+                                    onChange={(item) => onChange?.(item)}
+                                    disabled={field.disabled}
+                                    readOnly={field.readonly}
+                                    className={field.className}
+                                    aria-invalid={!!error}
                                 />
                             );
                         }

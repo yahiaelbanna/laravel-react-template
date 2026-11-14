@@ -1,3 +1,6 @@
+import type * as React from "react";
+import type { CropConfig, MediaUploaderLabels, UploadHandler, VideoConfig } from "@/components/media-uploader";
+
 export type FormSection = {
     key: string;
     title?: string;
@@ -96,15 +99,31 @@ export type SelectOption = {
     disabled?: boolean;
 };
 
+export type MediaFieldConfig = BaseFieldConfig & {
+    type: "media";
+    accept?: string;
+    multiple?: boolean;
+    maxFiles?: number;
+    maxSize?: number;
+    preventDuplicates?: boolean;
+    crop?: CropConfig;
+    video?: VideoConfig;
+    uploadHandler?: UploadHandler;
+    autoUpload?: boolean;
+    uploadConcurrency?: number;
+    labels?: MediaUploaderLabels;
+};
+
 export type FieldConfig =
     | StandardFieldConfig
     | SelectFieldConfig
     | ApiSelectConfig<any>
     | InputGroupConfig
     | DateFieldConfig
-    | RepeaterFieldConfig;
+    | RepeaterFieldConfig
+    | MediaFieldConfig;
 
 export type ResourceForm = FormSection[];
 
-export type FiledType = StandardFieldType | SelectFieldType | "apiSelect" | "inputGroup" | "date" | "repeater";
+export type FiledType = StandardFieldType | SelectFieldType | "apiSelect" | "inputGroup" | "date" | "repeater" | "media";
 export type FieldType = FiledType;
